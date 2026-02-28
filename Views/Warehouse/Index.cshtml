@@ -1,0 +1,202 @@
+@model StoreWave.ViewModels.WarehouseDashboardViewModel
+
+@{
+    ViewData["Title"] = "Warehouse Dashboard";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 fw-bold text-primary">
+                <i class="bi bi-building me-2"></i>Warehouse Dashboard
+            </h1>
+            <p class="text-muted mb-0">Monitor inventory levels and stock status</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-controller="Account" asp-action="Profile" class="btn btn-outline-success">
+                <i class="bi bi-person-circle me-1"></i>My Profile
+            </a>
+            <a asp-action="Inventory" class="btn btn-primary">
+                <i class="bi bi-box-seam me-1"></i>View All Inventory
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-boxes display-4"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h2 class="mb-0">@Model.TotalProducts</h2>
+                            <p class="mb-0 opacity-75">Total Products</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-stack display-4"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h2 class="mb-0">@Model.TotalStock.ToString("N0")</h2>
+                            <p class="mb-0 opacity-75">Total Stock Units</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-warning text-dark">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-exclamation-triangle display-4"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h2 class="mb-0">@Model.LowStockProducts.Count</h2>
+                            <p class="mb-0">Low Stock</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-danger text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-x-circle display-4"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h2 class="mb-0">@Model.OutOfStockProducts.Count</h2>
+                            <p class="mb-0 opacity-75">Out of Stock</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Low Stock Alerts -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-warning bg-opacity-25 py-3">
+                    <h5 class="mb-0 fw-bold text-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Low Stock Alerts
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.LowStockProducts.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Stock</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var product in Model.LowStockProducts.Take(5))
+                                    {
+                                        <tr>
+                                            <td>@product.Name</td>
+                                            <td>
+                                                <span class="badge bg-warning text-dark">@product.StockQuantity units</span>
+                                            </td>
+                                            <td>
+                                                <a asp-action="UpdateStock" asp-route-id="@product.Id" class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-plus-lg"></i> Restock
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (Model.LowStockProducts.Count > 5)
+                        {
+                            <div class="p-3 text-center">
+                                <a asp-action="LowStock" class="btn btn-sm btn-warning">View All @Model.LowStockProducts.Count Items</a>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-4 text-success">
+                            <i class="bi bi-check-circle display-4"></i>
+                            <p class="mt-2 mb-0">All products are well-stocked!</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Out of Stock Items -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-danger bg-opacity-25 py-3">
+                    <h5 class="mb-0 fw-bold text-danger">
+                        <i class="bi bi-x-circle me-2"></i>Out of Stock
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.OutOfStockProducts.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var product in Model.OutOfStockProducts.Take(5))
+                                    {
+                                        <tr>
+                                            <td>@product.Name</td>
+                                            <td>@product.CategoryName</td>
+                                            <td>
+                                                <a asp-action="UpdateStock" asp-route-id="@product.Id" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-plus-lg"></i> Add Stock
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4 text-success">
+                            <i class="bi bi-check-circle display-4"></i>
+                            <p class="mt-2 mb-0">No out-of-stock products!</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

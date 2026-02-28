@@ -1,0 +1,136 @@
+@model IEnumerable<StoreWave.DTOs.OrderDto>
+@using StoreWave.Models.Enums
+
+@{
+    ViewData["Title"] = "Supplier Orders";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 fw-bold text-primary">
+                <i class="bi bi-receipt me-2"></i>My Orders
+            </h1>
+            <p class="text-muted mb-0">Orders containing your products</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+        </a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Order #</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Payment</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                <tr>
+                                    <td><span class="fw-medium">@order.OrderNumber</span></td>
+                                    <td>@order.OrderDate.ToString("MMM dd, yyyy HH:mm")</td>
+                                    <td>@order.CustomerName</td>
+                                    <td>@order.PaymentMethod</td>
+                                    <td class="fw-bold">$@order.TotalAmount.ToString("N2")</td>
+                                    <td>
+                                        <span class="badge @(order.Status == OrderStatus.Delivered ? "bg-success" : 
+                                                           order.Status == OrderStatus.Cancelled ? "bg-danger" :
+                                                           order.Status == OrderStatus.Pending ? "bg-warning text-dark" : "bg-info")">
+                                            @order.Status
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#orderModal-@order.Id">
+                                            <i class="bi bi-eye"></i> Details
+                                        </button>
+
+                                        <!-- Order Details Modal -->
+                                        <div class="modal fade" id="orderModal-@order.Id" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title fw-bold">Order #@order.OrderNumber Details</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row mb-3">
+                                                            <div class="col-md-6">
+                                                                <h6 class="fw-bold">Shipping Address</h6>
+                                                                <p class="text-muted mb-0">
+                                                                    @order.ShippingAddress<br>
+                                                                    @order.ShippingCity, @order.ShippingCountry @order.ShippingPostalCode
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6 text-md-end">
+                                                                <h6 class="fw-bold">Order Info</h6>
+                                                                <p class="text-muted mb-0">
+                                                                    Placed: @order.OrderDate.ToString("g")<br>
+                                                                    Status: @order.Status
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <h6 class="fw-bold mt-4 mb-2">Order Items</h6>
+                                                        <table class="table table-sm table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Product</th>
+                                                                    <th>Qty</th>
+                                                                    <th>Unit Price</th>
+                                                                    <th>Total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var item in order.OrderItems)
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="d-flex align-items-center">
+                                                                                <img src="@(string.IsNullOrEmpty(item.ProductImageUrl) ? "https://placehold.co/30x30" : item.ProductImageUrl)" 
+                                                                                     class="rounded me-2" width="30" height="30" />
+                                                                                @item.ProductName
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>@item.Quantity</td>
+                                                                        <td>$@item.UnitPrice.ToString("N2")</td>
+                                                                        <td>$@item.TotalPrice.ToString("N2")</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-inbox display-4 text-muted"></i>
+            <p class="text-muted mt-2">No orders found containing your products yet.</p>
+        </div>
+    }
+</div>

@@ -1,0 +1,237 @@
+@model StoreWave.DTOs.ProductDto
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="py-3">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row gx-4 gx-lg-5">
+        <aside class="col-lg-6 mb-4">
+            <div class="card border-0 d-flex justify-content-center p-3">
+                <img style="max-width: 100%; max-height: 70vh; margin: auto; border-radius: var(--radius-lg);" class="fit" 
+                     src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "https://placehold.co/600x600/1e1d3a/6366f1?text=Product" : Model.ImageUrl)" />
+            </div>
+        </aside>
+        <main class="col-lg-6">
+            <div class="ps-lg-3">
+                <h3 class="fw-bold mb-2">@Model.Name</h3>
+                
+                <div class="d-flex flex-wrap align-items-center gap-3 my-3">
+                    <div class="text-warning">
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            if (i < Math.Round(Model.AverageRating))
+                            {
+                                <i class="bi bi-star-fill"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-star"></i>
+                            }
+                        }
+                        <span class="ms-1" style="color: var(--text-secondary);">@Model.AverageRating.ToString("F1")</span>
+                    </div>
+                    <span class="text-muted"><i class="bi bi-chat-left-text mx-1"></i>@Model.ReviewCount reviews</span>
+                    <span class="text-success"><i class="bi bi-check-circle mx-1"></i>In stock</span>
+                </div>
+
+                <div class="mb-3">
+                    @if (Model.IsOnSale)
+                    {
+                         <span class="h4 text-danger me-2">$@Model.DiscountPrice</span>
+                         <span class="text-muted text-decoration-line-through">$@Model.Price</span>
+                         <span class="badge bg-danger ms-2">
+                             <i class="bi bi-lightning-fill me-1"></i>Save @Model.DiscountPercentage%
+                         </span>
+                    }
+                    else
+                    {
+                        <span class="h4" style="color: var(--primary-light);">$@Model.Price</span>
+                    }
+                </div>
+
+                <p>@Model.Description</p>
+
+                <hr />
+
+                <div class="row mb-4">
+                    <div class="col-md-4 col-6">
+                        <label class="form-label mb-2">Quantity</label>
+                        <select class="form-select" id="quantitySelect">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post" id="addToCartForm">
+                        <input type="hidden" name="productId" value="@Model.Id" />
+                        <input type="hidden" name="quantity" value="1" id="quantityInput" />
+                        <button type="submit" class="btn btn-primary rounded-pill px-4 py-2">
+                            <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                        </button>
+                    </form>
+                    <a href="#reviews-section" class="btn btn-outline-secondary rounded-pill px-4 py-2">
+                        <i class="bi bi-chat-left-text me-1"></i> Reviews
+                    </a>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-warning rounded-pill px-3">
+                            <i class="bi bi-pencil me-1"></i>Edit Product
+                        </a>
+                    }
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-3">
+                        <i class="bi bi-arrow-left me-1"></i>Back to List
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="row mt-5" id="reviews-section">
+        <div class="col-12">
+            <div class="card border-0">
+                <div class="card-header py-3">
+                    <h5 class="card-title fw-bold mb-0">
+                        <i class="bi bi-star me-2" style="color: var(--warning);"></i>Customer Reviews
+                        <span class="badge bg-primary ms-2">@Model.ReviewCount</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Add Review Form -->
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <div class="card border-0 p-3" style="background: rgba(99, 102, 241, 0.06);">
+                                    <h6 class="fw-bold mb-3">
+                                        <i class="bi bi-pencil-square me-1" style="color: var(--primary-light);"></i>Write a Review
+                                    </h6>
+                                    <form asp-controller="Reviews" asp-action="Create" method="post">
+                                        <input type="hidden" name="ProductId" value="@Model.Id" />
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Rating</label>
+                                            <select name="Rating" class="form-select" required>
+                                                <option value="">Select rating...</option>
+                                                <option value="5">⭐⭐⭐⭐⭐ (5 - Excellent)</option>
+                                                <option value="4">⭐⭐⭐⭐ (4 - Very Good)</option>
+                                                <option value="3">⭐⭐⭐ (3 - Good)</option>
+                                                <option value="2">⭐⭐ (2 - Fair)</option>
+                                                <option value="1">⭐ (1 - Poor)</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Title (Optional)</label>
+                                            <input type="text" name="Title" class="form-control" placeholder="Summary of your review" maxlength="100" />
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Your Review</label>
+                                            <textarea name="Comment" class="form-control" rows="4" placeholder="Share your experience..." maxlength="2000"></textarea>
+                                        </div>
+                                        
+                                        <button type="submit" class="btn btn-primary w-100 rounded-pill">
+                                            <i class="bi bi-send me-2"></i>Submit Review
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="card border-0 p-3 text-center" style="background: rgba(99, 102, 241, 0.06);">
+                                    <i class="bi bi-person-circle display-4" style="color: var(--text-muted);"></i>
+                                    <p class="mt-2 mb-3">Please log in to write a review</p>
+                                    <a asp-controller="Account" asp-action="Login" class="btn btn-primary rounded-pill">Log In</a>
+                                </div>
+                            }
+                        </div>
+                        
+                        <!-- Reviews List -->
+                        <div class="col-md-8">
+                            @if (Model.Reviews != null && Model.Reviews.Any())
+                            {
+                                @foreach (var review in Model.Reviews)
+                                {
+                                    <div class="border-bottom pb-3 mb-3">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div>
+                                                <div class="text-warning mb-1">
+                                                    @for (int i = 0; i < 5; i++)
+                                                    {
+                                                        if (i < review.Rating)
+                                                        {
+                                                            <i class="bi bi-star-fill"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="bi bi-star"></i>
+                                                        }
+                                                    }
+                                                </div>
+                                                @if (!string.IsNullOrEmpty(review.Title))
+                                                {
+                                                    <h6 class="fw-bold mb-1">@review.Title</h6>
+                                                }
+                                            </div>
+                                            <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                        </div>
+                                        <p class="text-muted mb-1">@(review.Comment ?? "No comment")</p>
+                                        <small class="text-muted">By <strong style="color: var(--primary-light);">@review.CustomerName</strong></small>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="text-center py-4">
+                                    <i class="bi bi-chat-left-text display-4" style="color: var(--text-muted);"></i>
+                                    <p class="mt-2 text-muted">No reviews yet. Be the first to review this product!</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('quantitySelect').addEventListener('change', function() {
+            document.getElementById('quantityInput').value = this.value;
+        });
+    </script>
+}

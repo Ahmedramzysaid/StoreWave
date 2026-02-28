@@ -1,0 +1,183 @@
+@model StoreWave.DTOs.OrderDto
+@using StoreWave.Models.Enums
+
+@{
+    ViewData["Title"] = $"Order {Model.OrderNumber}";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0"><i class="bi bi-receipt me-2"></i>Order @Model.OrderNumber</h2>
+        <a asp-action="Orders" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Orders
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row g-4">
+        <!-- Order Details -->
+        <div class="col-lg-8">
+            <!-- Order Items -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title fw-bold mb-0"><i class="bi bi-box me-2"></i>Order Items</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="border-0">Product</th>
+                                    <th class="border-0">Quantity</th>
+                                    <th class="border-0">Unit Price</th>
+                                    <th class="border-0 text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderItems)
+                                {
+                                    <tr>
+                                        <td class="align-middle">
+                                            <div class="d-flex align-items-center">
+                                                <img src="@(string.IsNullOrEmpty(item.ProductImageUrl) ? "https://placehold.co/50x50?text=Product" : item.ProductImageUrl)" 
+                                                     class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                <span class="fw-semibold">@item.ProductName</span>
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">@item.Quantity</td>
+                                        <td class="align-middle">$@item.UnitPrice.ToString("N2")</td>
+                                        <td class="align-middle text-end fw-bold">$@item.TotalPrice.ToString("N2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="bg-light">
+                                <tr>
+                                    <td colspan="3" class="text-end fw-semibold">Subtotal:</td>
+                                    <td class="text-end">$@Model.SubTotal.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end fw-semibold">Shipping:</td>
+                                    <td class="text-end">$@Model.ShippingCost.ToString("N2")</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="text-end fw-bold fs-5">Total:</td>
+                                    <td class="text-end fw-bold fs-5 text-primary">$@Model.TotalAmount.ToString("N2")</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping Details -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title fw-bold mb-0"><i class="bi bi-geo-alt me-2"></i>Shipping Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>Address:</strong></p>
+                            <p class="text-muted">@Model.ShippingAddress</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1"><strong>City:</strong> @Model.ShippingCity</p>
+                            <p class="mb-1"><strong>Country:</strong> @Model.ShippingCountry</p>
+                            <p class="mb-0"><strong>Postal Code:</strong> @(Model.ShippingPostalCode ?? "N/A")</p>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Notes))
+                    {
+                        <hr>
+                        <p class="mb-1"><strong>Order Notes:</strong></p>
+                        <p class="text-muted mb-0">@Model.Notes</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Status & Actions -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title fw-bold mb-0"><i class="bi bi-info-circle me-2"></i>Order Information</h5>
+                </div>
+                <div class="card-body">
+                    @{
+                        var statusBadge = Model.Status switch {
+                            OrderStatus.Pending => "bg-warning text-dark",
+                            OrderStatus.Confirmed => "bg-info",
+                            OrderStatus.Processing => "bg-primary",
+                            OrderStatus.Shipped => "bg-secondary",
+                            OrderStatus.Delivered => "bg-success",
+                            OrderStatus.Cancelled => "bg-danger",
+                            _ => "bg-secondary"
+                        };
+                    }
+                    <div class="mb-3">
+                        <small class="text-muted">Status</small>
+                        <div><span class="badge @statusBadge fs-6">@Model.Status</span></div>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Order Date</small>
+                        <div class="fw-semibold">@Model.OrderDate.ToString("MMMM dd, yyyy hh:mm tt")</div>
+                    </div>
+                    <div class="mb-3">
+                        <small class="text-muted">Customer</small>
+                        <div class="fw-semibold">@Model.CustomerName</div>
+                    </div>
+                    <div class="mb-3">  
+                        <small class="text-muted">Payment Method</small>
+                        <div class="fw-semibold">@Model.PaymentMethod</div>
+                    </div>
+                    @if (Model.ShippedDate.HasValue)
+                    {
+                        <div class="mb-3">
+                            <small class="text-muted">Shipped Date</small>
+                            <div class="fw-semibold">@Model.ShippedDate.Value.ToString("MMMM dd, yyyy")</div>
+                        </div>
+                    }
+                    @if (Model.DeliveredDate.HasValue)
+                    {
+                        <div class="mb-3">
+                            <small class="text-muted">Delivered Date</small>
+                            <div class="fw-semibold">@Model.DeliveredDate.Value.ToString("MMMM dd, yyyy")</div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Update Status -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="card-title fw-bold mb-0"><i class="bi bi-arrow-repeat me-2"></i>Update Status</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateOrderStatus" method="post">
+                        <input type="hidden" name="orderId" value="@Model.Id" />
+                        <div class="mb-3">
+                            <select name="status" class="form-select" asp-items="ViewBag.StatusList"></select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-check-circle me-2"></i>Update Status
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

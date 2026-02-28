@@ -1,0 +1,109 @@
+@model StoreWave.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            <div class="card border-0 auth-card">
+                <div class="card-body p-4 p-md-5">
+                    <div class="text-center mb-4">
+                        <div class="auth-icon mb-2">
+                            <i class="bi bi-person-plus"></i>
+                        </div>
+                        <h2 class="mt-2 fw-bold">Create Account</h2>
+                        <p class="text-muted">Join us to start shopping!</p>
+                    </div>
+
+                    <form asp-action="Register" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input asp-for="FirstName" class="form-control" placeholder="John" />
+                                    <label asp-for="FirstName">First Name</label>
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input asp-for="LastName" class="form-control" placeholder="Doe" />
+                                    <label asp-for="LastName">Last Name</label>
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Email" class="form-control" placeholder="name@example.com" />
+                            <label asp-for="Email">Email address</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                           <input asp-for="PhoneNumber" class="form-control" placeholder="+1234567890" />
+                           <label asp-for="PhoneNumber">Phone Number</label>
+                           <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                       </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input asp-for="Password" class="form-control" placeholder="password" />
+                                    <label asp-for="Password">Password</label>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating">
+                                    <input asp-for="ConfirmPassword" class="form-control" placeholder="password" />
+                                    <label asp-for="ConfirmPassword">Confirm Password</label>
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 mb-4" style="background: rgba(99, 102, 241, 0.06) !important;">
+                            <div class="card-body">
+                                <h6 class="card-title mb-3" style="color: var(--text-muted);">
+                                    <i class="bi bi-geo-alt me-1"></i>Address Details (Optional)
+                                </h6>
+                                <div class="mb-2">
+                                    <input asp-for="Address" class="form-control form-control-sm mb-2" placeholder="Address Line" />
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <input asp-for="City" class="form-control form-control-sm" placeholder="City" />
+                                    </div>
+                                    <div class="col-6">
+                                        <input asp-for="PostalCode" class="form-control form-control-sm" placeholder="Postal Code" />
+                                    </div>
+                                    <div class="col-12">
+                                        <input asp-for="Country" class="form-control form-control-sm" placeholder="Country" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill">
+                                <i class="bi bi-person-check me-1"></i>Create Account
+                            </button>
+                        </div>
+                        
+                        <div class="text-center">
+                            <p class="mb-0">Already have an account? <a asp-action="Login" style="color: var(--primary-light);">Log in</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

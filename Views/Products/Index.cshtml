@@ -1,0 +1,169 @@
+@model StoreWave.ViewModels.ProductListViewModel
+
+@{
+    ViewData["Title"] = "Shop Products";
+}
+
+<div class="row g-4">
+    <!-- Sidebar Filters -->
+    <div class="col-lg-3 mb-4">
+        <div class="card border-0">
+            <div class="card-header py-3">
+                <h5 class="card-title fw-bold mb-0">
+                    <i class="bi bi-funnel me-2" style="color: var(--primary-light);"></i>Categories
+                </h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <a asp-action="Index" 
+                   class="list-group-item list-group-item-action @(Model.CurrentCategoryId == null ? "active fw-bold" : "")">
+                   <i class="bi bi-grid-3x3-gap me-2"></i>All Products
+                </a>
+                @foreach (var category in Model.Categories)
+                {
+                    <a asp-action="Index" asp-route-categoryId="@category.Id" 
+                       class="list-group-item list-group-item-action @(Model.CurrentCategoryId == category.Id ? "active fw-bold" : "")">
+                        <i class="bi bi-tag me-2"></i>@category.Name
+                        <span class="badge bg-primary float-end">@category.ProductCount</span>
+                    </a>
+                }
+            </div>
+        </div>
+
+        @if (User.IsInRole("Admin"))
+        {
+        <div class="card border-0 mt-4">
+            <div class="card-header py-3">
+                 <h5 class="card-title fw-bold mb-0">
+                     <i class="bi bi-gear me-2" style="color: var(--warning);"></i>Admin Actions
+                 </h5>
+            </div>
+            <div class="card-body">
+                <a asp-action="Create" class="btn btn-success w-100 rounded-pill">
+                    <i class="bi bi-plus-lg me-1"></i> Add New Product
+                </a>
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- Product Grid -->
+    <div class="col-lg-9">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-2">
+            <h2 class="fw-bold mb-0">
+                <span class="gradient-text">@Model.CurrentCategoryName</span>
+            </h2>
+            <div class="badge bg-primary py-2 px-3">
+                <i class="bi bi-box-seam me-1"></i>@Model.Products.Count() products
+            </div>
+        </div>
+
+        @if (!Model.Products.Any())
+        {
+            <div class="card text-center py-5">
+                <div class="card-body">
+                    <i class="bi bi-search display-1" style="color: var(--text-muted);"></i>
+                    <h3 class="mt-3">No products found</h3>
+                    <p class="text-muted">Try changing your filters or search term.</p>
+                    <a asp-action="Index" class="btn btn-primary rounded-pill mt-2 px-4">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>Clear Filters
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4">
+                @foreach (var item in Model.Products)
+                {
+                    <div class="col">
+                        <div class="card h-100 product-card border-0">
+                            <div class="position-relative overflow-hidden">
+                                @if (item.IsOnSale)
+                                {
+                                    <span class="position-absolute top-0 start-0 badge bg-danger m-3" style="z-index: 2;">
+                                        <i class="bi bi-lightning-fill me-1"></i>-@item.DiscountPercentage%
+                                    </span>
+                                }
+                                <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://placehold.co/400x300/1e1d3a/6366f1?text=Product" : item.ImageUrl)" 
+                                     class="card-img-top" alt="@item.Name" style="height: 220px; object-fit: cover; border-radius: 0;">
+                                
+                                <div class="product-actions position-absolute top-50 start-50 translate-middle w-100 text-center opacity-0 transition-opacity">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-light rounded-circle mx-1" style="width: 42px; height: 42px;">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <button class="btn btn-primary rounded-circle mx-1" style="width: 42px; height: 42px;">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                @* <small class="text-muted mb-1">@item.CategoryName</small> *@
+                                <h5 class="card-title text-truncate">@item.Name</h5>
+                                <p class="card-text text-truncate small text-muted">@item.Description</p>
+                                
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            @if (item.IsOnSale)
+                                            {
+                                                <span class="text-danger fw-bold fs-5">$@item.DiscountPrice</span>
+                                                <small class="text-muted text-decoration-line-through ms-1">$@item.Price</small>
+                                            }
+                                            else
+                                            {
+                                                <span class="fw-bold fs-5" style="color: var(--primary-light);">$@item.Price</span>
+                                            }
+                                        </div>
+                                        <div class="text-warning small">
+                                            @for (int i = 0; i < 5; i++)
+                                            {
+                                                if (i < Math.Round(item.AverageRating))
+                                                {
+                                                    <i class="bi bi-star-fill"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-star"></i>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="btn-group w-100 mt-3">
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">
+                                                <i class="bi bi-pencil me-1"></i>Edit
+                                            </a>
+                                        }
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye me-1"></i>Details
+                                        </a>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash me-1"></i>Delete
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .product-card:hover .product-actions {
+        opacity: 1 !important;
+    }
+    .product-card:hover {
+        transform: translateY(-8px) !important;
+    }
+    .transition-opacity {
+        transition: opacity 0.3s ease;
+    }
+</style>

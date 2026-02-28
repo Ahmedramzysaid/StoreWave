@@ -1,0 +1,178 @@
+@model StoreWave.ViewModels.AdminDashboardViewModel
+@using StoreWave.Models.Enums
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-2">
+        <h2 class="fw-bold mb-0">
+            <i class="bi bi-speedometer2 me-2" style="color: var(--primary-light);"></i>
+            <span class="gradient-text">Dashboard</span>
+        </h2>
+        <span class="text-muted"><i class="bi bi-person-badge me-1"></i>Welcome, Admin!</span>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 g-lg-4 mb-4">
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 h-100 stat-card stat-card-orders text-white" style="background: var(--gradient-primary) !important;">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-cart-check display-5"></i>
+                    <h3 class="fw-bold mt-2 mb-0">@Model.TotalOrders</h3>
+                    <small class="opacity-75">Total Orders</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 h-100 stat-card stat-card-sales text-white" style="background: var(--gradient-success) !important;">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-currency-dollar display-5"></i>
+                    <h3 class="fw-bold mt-2 mb-0">$@Model.TotalSales.ToString("N2")</h3>
+                    <small class="opacity-75">Total Sales</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 h-100 stat-card stat-card-pending text-white" style="background: var(--gradient-warning) !important;">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-clock-history display-5"></i>
+                    <h3 class="fw-bold mt-2 mb-0">@Model.PendingOrders</h3>
+                    <small class="opacity-75">Pending</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 h-100 stat-card stat-card-products text-white" style="background: var(--gradient-info) !important;">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-box-seam display-5"></i>
+                    <h3 class="fw-bold mt-2 mb-0">@Model.TotalProducts</h3>
+                    <small class="opacity-75">Products</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 h-100 stat-card stat-card-categories text-white" style="background: linear-gradient(135deg, #6366f1, #ec4899) !important;">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-tags display-5"></i>
+                    <h3 class="fw-bold mt-2 mb-0">@Model.TotalCategories</h3>
+                    <small class="opacity-75">Categories</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+            <div class="card border-0 h-100 stat-card stat-card-customers text-white" style="background: var(--gradient-dark) !important;">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-people display-5"></i>
+                    <h3 class="fw-bold mt-2 mb-0">@Model.TotalCustomers</h3>
+                    <small class="opacity-75">Customers</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Quick Actions -->
+        <div class="col-lg-4">
+            <div class="card border-0 h-100">
+                <div class="card-header py-3">
+                    <h5 class="card-title fw-bold mb-0">
+                        <i class="bi bi-lightning me-2" style="color: var(--warning);"></i>Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Products" asp-action="Create" class="btn btn-outline-primary">
+                            <i class="bi bi-plus-circle me-2"></i>Add New Product
+                        </a>
+                        <a asp-controller="Categories" asp-action="Create" class="btn btn-outline-secondary">
+                            <i class="bi bi-plus-circle me-2"></i>Add New Category
+                        </a>
+                        <a asp-action="Orders" class="btn btn-outline-info">
+                            <i class="bi bi-list-check me-2"></i>View All Orders
+                        </a>
+                        <a asp-action="Orders" asp-route-status="@OrderStatus.Pending" class="btn btn-outline-warning">
+                            <i class="bi bi-clock me-2"></i>View Pending Orders
+                        </a>
+                        <a asp-action="Users" class="btn btn-outline-dark">
+                            <i class="bi bi-people me-2"></i>View All Users
+                        </a>
+                        <a asp-controller="Account" asp-action="Profile" class="btn btn-outline-success">
+                            <i class="bi bi-person-circle me-2"></i>My Profile
+                        </a>
+                        <a asp-action="OrderChats" class="btn btn-outline-primary">
+                            <i class="bi bi-chat-dots me-2"></i>Order Chats
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="col-lg-8">
+            <div class="card border-0 h-100">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title fw-bold mb-0">
+                        <i class="bi bi-receipt me-2" style="color: var(--primary-light);"></i>Recent Orders
+                    </h5>
+                    <a asp-action="Orders" class="btn btn-sm btn-outline-primary rounded-pill px-3">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    @if (!Model.RecentOrders.Any())
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-inbox display-4" style="color: var(--text-muted);"></i>
+                            <p class="mt-2 text-muted">No orders yet.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Customer</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.RecentOrders)
+                                    {
+                                        var statusBadge = order.Status switch {
+                                            OrderStatus.Pending => "bg-warning",
+                                            OrderStatus.Confirmed => "bg-info",
+                                            OrderStatus.Processing => "bg-primary",
+                                            OrderStatus.Shipped => "bg-secondary",
+                                            OrderStatus.Delivered => "bg-success",
+                                            OrderStatus.Cancelled => "bg-danger",
+                                            _ => "bg-secondary"
+                                        };
+                                        <tr>
+                                            <td class="fw-semibold">@order.OrderNumber</td>
+                                            <td>@order.CustomerName</td>
+                                            <td class="fw-semibold" style="color: var(--primary-light);">$@order.TotalAmount.ToString("N2")</td>
+                                            <td>
+                                                <span class="badge @statusBadge">@order.Status</span>
+                                            </td>
+                                            <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                                            <td class="text-end">
+                                                <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary rounded-pill">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

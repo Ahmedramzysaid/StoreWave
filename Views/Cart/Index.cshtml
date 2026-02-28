@@ -1,0 +1,118 @@
+@model StoreWave.DTOs.CartDto
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="py-4">
+    <h2 class="fw-bold mb-4">
+        <i class="bi bi-cart3 me-2" style="color: var(--primary-light);"></i>
+        <span class="gradient-text">Shopping Cart</span>
+    </h2>
+
+    @if (!Model.Items.Any())
+    {
+        <div class="card text-center py-5">
+            <div class="card-body">
+                <i class="bi bi-cart-x display-1" style="color: var(--text-muted);"></i>
+                <h3 class="mt-3">Your cart is empty</h3>
+                <p class="text-muted">Looks like you haven't added anything to your cart yet.</p>
+                <a asp-controller="Products" asp-action="Index" class="btn btn-primary rounded-pill mt-3 px-5">
+                    <i class="bi bi-bag me-1"></i>Start Shopping
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card border-0 mb-4">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="p-3">Product</th>
+                                        <th scope="col" class="p-3">Quantity</th>
+                                        <th scope="col" class="p-3">Price</th>
+                                        <th scope="col" class="p-3 text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Items)
+                                    {
+                                        <tr>
+                                            <td class="p-3">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="@(string.IsNullOrEmpty(item.ProductImageUrl) ? "https://placehold.co/100x100/1e1d3a/6366f1?text=Product" : item.ProductImageUrl)" 
+                                                         class="rounded me-3" style="width: 60px; height: 60px; object-fit: cover; border: 1px solid var(--border-color);">
+                                                    <div>
+                                                        <h6 class="mb-0">
+                                                            <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId" 
+                                                               style="color: var(--text-primary); text-decoration: none;">@item.ProductName</a>
+                                                        </h6>
+                                                        <small class="text-muted">Unit: $@item.UnitPrice</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="p-3">
+                                                <form asp-action="UpdateQuantity" method="post" class="d-flex align-items-center" style="max-width: 120px;">
+                                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                                    <button type="submit" name="quantity" value="@(item.Quantity - 1)" class="btn btn-sm btn-outline-secondary" @(item.Quantity <= 1 ? "disabled" : "")>-</button>
+                                                    <input type="text" class="form-control form-control-sm text-center mx-1" value="@item.Quantity" readonly style="width: 40px;">
+                                                    <button type="submit" name="quantity" value="@(item.Quantity + 1)" class="btn btn-sm btn-outline-secondary">+</button>
+                                                </form>
+                                            </td>
+                                            <td class="p-3 fw-bold" style="color: var(--primary-light);">$@item.TotalPrice</td>
+                                            <td class="p-3 text-end">
+                                                <form asp-action="RemoveFromCart" method="post">
+                                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card border-0" style="border: 1px solid rgba(99, 102, 241, 0.25) !important;">
+                    <div class="card-header py-3">
+                        <h5 class="card-title fw-bold mb-0">
+                            <i class="bi bi-receipt me-2" style="color: var(--primary-light);"></i>Order Summary
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Subtotal</span>
+                            <span>$@Model.SubTotal</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Shipping</span>
+                            <span>$@Model.ShippingCost</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-bold fs-5">Total</span>
+                            <span class="fw-bold fs-5 gradient-text">$@Model.Total</span>
+                        </div>
+                        
+                        <a asp-action="Checkout" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">
+                            <i class="bi bi-lock me-1"></i>Proceed to Checkout
+                        </a>
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-outline-secondary w-100 rounded-pill py-2 mt-2">
+                            <i class="bi bi-arrow-left me-1"></i>Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

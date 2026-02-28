@@ -1,0 +1,248 @@
+@model List<StoreWave.Models.Entities.ChatMessage>
+
+@using Microsoft.AspNetCore.Identity
+@using StoreWave.Models.Entities
+@inject UserManager<Customer> UserManager
+
+@{
+    ViewData["Title"] = "Order Chat";
+    var order = (StoreWave.DTOs.OrderDto)ViewBag.Order;
+    var currentUserId = (int)ViewBag.CurrentUserId;
+}
+
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 fw-bold">
+                <i class="bi bi-chat-dots me-2" style="color: var(--primary-light);"></i>Chat — @order.OrderNumber
+            </h1>
+            <p class="text-muted mb-0">
+                Customer: <strong>@order.CustomerName</strong> · Total: <strong>$@order.TotalAmount</strong> ·
+                Status: <span class="badge @(order.Status.ToString() == "Delivered" ? "bg-success" :
+                                              order.Status.ToString() == "Cancelled" ? "bg-danger" :
+                                              order.Status.ToString() == "Pending" ? "bg-warning" : "bg-info")">@order.Status</span>
+            </p>
+        </div>
+        <a asp-action="OrderChats" class="btn btn-outline-secondary rounded-pill">
+            <i class="bi bi-arrow-left me-1"></i>All Chats
+        </a>
+    </div>
+
+    <!-- Chat Card -->
+    <div class="card border-0" id="chatCard">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center"
+             style="background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(139,92,246,0.08)) !important;">
+            <h5 class="fw-bold mb-0">
+                <i class="bi bi-chat-left-text me-2"></i>Conversation
+            </h5>
+            <span class="badge bg-success" id="chatStatus" style="display:none;">
+                <i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i>Connected
+            </span>
+        </div>
+        <div class="card-body p-0">
+            <!-- Messages -->
+            <div id="chatMessages" style="height: 450px; overflow-y: auto; padding: 1.2rem;">
+                @if (!Model.Any())
+                {
+                    <div class="text-center text-muted py-5" id="emptyChat">
+                        <i class="bi bi-chat-square-text display-4"></i>
+                        <p class="mt-2 mb-0">No messages in this conversation yet.</p>
+                    </div>
+                }
+                else
+                {
+                    <div id="emptyChat" style="display:none;"></div>
+                    @foreach (var msg in Model)
+                    {
+                        var isMine = msg.SenderId == currentUserId;
+                        <div class="chat-bubble @(isMine ? "sent" : "received")">
+                            @if (!isMine)
+                            {
+                                <div class="chat-sender">@msg.Sender.FullName</div>
+                            }
+                            else
+                            {
+                                <div class="chat-sender">🛡️ You (Admin)</div>
+                            }
+                            <div>@msg.Message</div>
+                            <div class="chat-meta">
+                                @msg.SentAt.ToString("MMM dd, hh:mm tt")
+                                @if (msg.IsRead)
+                                {
+                                    <i class="bi bi-check2-all ms-1" style="color: #38bdf8;"></i>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Input -->
+            <div style="border-top: 1px solid var(--border-color); padding: 1rem 1.2rem;">
+                <div class="input-group">
+                    <input type="text" id="chatInput" class="form-control"
+                           placeholder="Reply to customer..." autocomplete="off"
+                           style="border-radius: 25px 0 0 25px; padding: 0.6rem 1.2rem;" />
+                    <button id="chatSendBtn" class="btn btn-primary"
+                            style="border-radius: 0 25px 25px 0; padding: 0.6rem 1.5rem;">
+                        <i class="bi bi-send me-1"></i>Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .chat-bubble {
+        max-width: 75%;
+        padding: 0.6rem 1rem;
+        border-radius: 16px;
+        margin-bottom: 0.8rem;
+        position: relative;
+        word-wrap: break-word;
+        animation: fadeInUp 0.3s ease;
+    }
+
+    @@keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-bubble.sent {
+        background: var(--gradient-primary);
+        color: #fff;
+        margin-left: auto;
+        border-bottom-right-radius: 4px;
+    }
+
+    .chat-bubble.received {
+        background: rgba(99, 102, 241, 0.1);
+        color: var(--text-primary);
+        margin-right: auto;
+        border-bottom-left-radius: 4px;
+    }
+
+    .chat-bubble .chat-meta {
+        font-size: 0.7rem;
+        opacity: 0.7;
+        margin-top: 0.3rem;
+    }
+
+    .chat-bubble .chat-sender {
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 0.2rem;
+    }
+
+    .chat-bubble.received .chat-sender {
+        color: var(--primary-light);
+    }
+
+    #chatMessages::-webkit-scrollbar { width: 4px; }
+    #chatMessages::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.3); border-radius: 4px; }
+</style>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <script>
+        (function () {
+            const orderId = @order.Id;
+            const currentUserId = @currentUserId;
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const chatSendBtn = document.getElementById('chatSendBtn');
+            const emptyChat = document.getElementById('emptyChat');
+            const chatStatus = document.getElementById('chatStatus');
+
+            // Scroll to bottom on load
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // SignalR Connection
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/chatHub")
+                .withAutomaticReconnect()
+                .build();
+
+            connection.start()
+                .then(() => {
+                    chatStatus.style.display = 'inline-flex';
+                    connection.invoke("JoinOrderChat", orderId);
+                    connection.invoke("MarkAsRead", orderId);
+                })
+                .catch(err => console.error('Chat connection failed:', err));
+
+            connection.onreconnected(() => {
+                chatStatus.style.display = 'inline-flex';
+                connection.invoke("JoinOrderChat", orderId);
+            });
+
+            connection.onclose(() => {
+                chatStatus.style.display = 'none';
+            });
+
+            // Receive messages
+            connection.on("ReceiveMessage", function (msg) {
+                emptyChat.style.display = 'none';
+                appendMessage(msg);
+                scrollToBottom();
+
+                if (msg.senderId !== currentUserId) {
+                    connection.invoke("MarkAsRead", orderId);
+                }
+            });
+
+            // Send message
+            function sendMessage() {
+                const text = chatInput.value.trim();
+                if (!text) return;
+
+                connection.invoke("SendMessage", orderId, text)
+                    .catch(err => console.error('Send failed:', err));
+
+                chatInput.value = '';
+                chatInput.focus();
+            }
+
+            chatSendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            function appendMessage(msg) {
+                const isMine = msg.senderId === currentUserId;
+                const bubble = document.createElement('div');
+                bubble.className = `chat-bubble ${isMine ? 'sent' : 'received'}`;
+
+                let senderLabel = '';
+                if (isMine) {
+                    senderLabel = `<div class="chat-sender">🛡️ You (Admin)</div>`;
+                } else {
+                    senderLabel = `<div class="chat-sender">${msg.senderName}</div>`;
+                }
+
+                bubble.innerHTML = `
+                    ${senderLabel}
+                    <div>${escapeHtml(msg.message)}</div>
+                    <div class="chat-meta">${msg.sentAt}</div>
+                `;
+
+                chatMessages.appendChild(bubble);
+            }
+
+            function scrollToBottom() {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        })();
+    </script>
+}

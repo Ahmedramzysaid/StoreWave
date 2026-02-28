@@ -1,0 +1,105 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Ahmed Ramzy\\OneDrive - Faculty of Computers \u0026 Artificial Intelligence\\Desktop\\project MVC\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BA8DF6CD-3E22-92BC-5651-1AA77689D5A3}|ShopSmart.csproj|c:\\users\\ahmed ramzy\\onedrive - faculty of computers \u0026 artificial intelligence\\desktop\\project mvc\\shopmartcommerce.runasp.net-webdeploy.publishsettings||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{BA8DF6CD-3E22-92BC-5651-1AA77689D5A3}|ShopSmart.csproj|solutionrelative:shopmartcommerce.runasp.net-webdeploy.publishsettings||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA8DF6CD-3E22-92BC-5651-1AA77689D5A3}|ShopSmart.csproj|c:\\users\\ahmed ramzy\\onedrive - faculty of computers \u0026 artificial intelligence\\desktop\\project mvc\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{BA8DF6CD-3E22-92BC-5651-1AA77689D5A3}|ShopSmart.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA8DF6CD-3E22-92BC-5651-1AA77689D5A3}|ShopSmart.csproj|c:\\users\\ahmed ramzy\\onedrive - faculty of computers \u0026 artificial intelligence\\desktop\\project mvc\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA8DF6CD-3E22-92BC-5651-1AA77689D5A3}|ShopSmart.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA8DF6CD-3E22-92BC-5651-1AA77689D5A3}|ShopSmart.csproj|c:\\users\\ahmed ramzy\\onedrive - faculty of computers \u0026 artificial intelligence\\desktop\\project mvc\\controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA8DF6CD-3E22-92BC-5651-1AA77689D5A3}|ShopSmart.csproj|solutionrelative:controllers\\productscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA8DF6CD-3E22-92BC-5651-1AA77689D5A3}|ShopSmart.csproj|c:\\users\\ahmed ramzy\\onedrive - faculty of computers \u0026 artificial intelligence\\desktop\\project mvc\\shopsmart.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{BA8DF6CD-3E22-92BC-5651-1AA77689D5A3}|ShopSmart.csproj|solutionrelative:shopsmart.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "shopmartcommerce.runasp.net-WebDeploy.publishSettings",
+              "DocumentMoniker": "C:\\Users\\Ahmed Ramzy\\OneDrive - Faculty of Computers \u0026 Artificial Intelligence\\Desktop\\project MVC\\shopmartcommerce.runasp.net-WebDeploy.publishSettings",
+              "RelativeDocumentMoniker": "shopmartcommerce.runasp.net-WebDeploy.publishSettings",
+              "ToolTip": "C:\\Users\\Ahmed Ramzy\\OneDrive - Faculty of Computers \u0026 Artificial Intelligence\\Desktop\\project MVC\\shopmartcommerce.runasp.net-WebDeploy.publishSettings",
+              "RelativeToolTip": "shopmartcommerce.runasp.net-WebDeploy.publishSettings",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-02-26T19:56:35.052Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ProductsController.cs",
+              "DocumentMoniker": "C:\\Users\\Ahmed Ramzy\\OneDrive - Faculty of Computers \u0026 Artificial Intelligence\\Desktop\\project MVC\\Controllers\\ProductsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ProductsController.cs",
+              "ToolTip": "C:\\Users\\Ahmed Ramzy\\OneDrive - Faculty of Computers \u0026 Artificial Intelligence\\Desktop\\project MVC\\Controllers\\ProductsController.cs",
+              "RelativeToolTip": "Controllers\\ProductsController.cs",
+              "ViewState": "AgIAAI4AAAAAAAAAAADwv5IAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-06T23:10:44.253Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ShopSmart",
+              "DocumentMoniker": "C:\\Users\\Ahmed Ramzy\\OneDrive - Faculty of Computers \u0026 Artificial Intelligence\\Desktop\\project MVC\\ShopSmart.csproj",
+              "RelativeDocumentMoniker": "ShopSmart.csproj",
+              "ToolTip": "C:\\Users\\Ahmed Ramzy\\OneDrive - Faculty of Computers \u0026 Artificial Intelligence\\Desktop\\project MVC\\ShopSmart.csproj",
+              "RelativeToolTip": "ShopSmart.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-02-06T23:08:44.962Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Ahmed Ramzy\\OneDrive - Faculty of Computers \u0026 Artificial Intelligence\\Desktop\\project MVC\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Ahmed Ramzy\\OneDrive - Faculty of Computers \u0026 Artificial Intelligence\\Desktop\\project MVC\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAAMAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-02-06T23:08:13.738Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Ahmed Ramzy\\OneDrive - Faculty of Computers \u0026 Artificial Intelligence\\Desktop\\project MVC\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Ahmed Ramzy\\OneDrive - Faculty of Computers \u0026 Artificial Intelligence\\Desktop\\project MVC\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAHcAAAAAAAAAAAAcwH0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-06T23:08:05.072Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

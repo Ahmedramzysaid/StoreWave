@@ -1,0 +1,255 @@
+@model StoreWave.ViewModels.AdminUserProfileViewModel
+
+@{
+    ViewData["Title"] = $"{Model.FullName} - User Profile";
+}
+
+<style>
+    .profile-hero {
+        background: var(--gradient-primary);
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .profile-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 50%;
+    }
+
+    .profile-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -10%;
+        width: 200px;
+        height: 200px;
+        background: rgba(255,255,255,0.03);
+        border-radius: 50%;
+    }
+
+    .profile-avatar-lg {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 2rem;
+        color: var(--primary-light);
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border: 3px solid rgba(255,255,255,0.25);
+        letter-spacing: 1px;
+    }
+
+    .info-card {
+        border-radius: 14px;
+        border: none;
+        transition: all 0.2s ease;
+    }
+
+    .info-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    }
+
+    .info-item {
+        padding: 0.85rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .info-item:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-muted);
+        margin-bottom: 0.25rem;
+    }
+
+    .info-value {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .role-badge-lg {
+        font-size: 0.82rem;
+        font-weight: 600;
+        padding: 5px 14px;
+        border-radius: 50px;
+        letter-spacing: 0.3px;
+    }
+
+    .role-admin { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+    .role-supplier { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #1a3a2a; }
+    .role-warehousemanager { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #1a2a3a; }
+    .role-accountant { background: linear-gradient(135deg, #fa709a, #fee140); color: #3a1a1a; }
+    .role-customer { background: rgba(108, 117, 125, 0.15); color: #6c757d; }
+
+    .stat-box {
+        text-align: center;
+        padding: 1.2rem;
+        border-radius: 12px;
+        background: rgba(99, 102, 241, 0.06);
+        border: 1px solid rgba(99, 102, 241, 0.1);
+    }
+</style>
+
+<div class="py-4">
+    <!-- Back Button -->
+    <div class="mb-4">
+        <a asp-action="Users" class="btn btn-outline-secondary rounded-pill px-3">
+            <i class="bi bi-arrow-left me-1"></i>Back to Users
+        </a>
+    </div>
+
+    <!-- Profile Hero -->
+    <div class="profile-hero text-white mb-4">
+        <div class="d-flex flex-column flex-md-row align-items-center gap-4 position-relative" style="z-index:1;">
+            <div class="profile-avatar-lg">
+                @Model.Initials
+            </div>
+            <div class="text-center text-md-start">
+                <h2 class="fw-bold mb-1">@Model.FullName</h2>
+                <p class="mb-2 opacity-75">
+                    <i class="bi bi-envelope me-1"></i>@Model.Email
+                </p>
+                <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+                    @foreach (var role in Model.Roles)
+                    {
+                        <span class="role-badge-lg role-@role.ToLower()">@role</span>
+                    }
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge bg-success rounded-pill" style="padding: 5px 14px;">
+                            <i class="bi bi-check-circle me-1"></i>Active
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger rounded-pill" style="padding: 5px 14px;">
+                            <i class="bi bi-x-circle me-1"></i>Inactive
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- User Stats -->
+        <div class="col-lg-4">
+            <div class="card info-card h-100">
+                <div class="card-header py-3">
+                    <h5 class="fw-bold mb-0">
+                        <i class="bi bi-bar-chart me-2" style="color: var(--primary-light);"></i>Overview
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="stat-box mb-3">
+                        <h3 class="fw-bold mb-0" style="color: var(--primary-light);">@Model.TotalOrders</h3>
+                        <small class="text-muted">Total Orders</small>
+                    </div>
+                    <div class="stat-box mb-3">
+                        <h3 class="fw-bold mb-0" style="color: var(--primary-light);">
+                            @Model.CreatedAt.ToString("MMM dd, yyyy")
+                        </h3>
+                        <small class="text-muted">Member Since</small>
+                    </div>
+                    <div class="stat-box">
+                        <h3 class="fw-bold mb-0" style="color: var(--primary-light);">
+                            @(Model.IsActive ? "Active" : "Inactive")
+                        </h3>
+                        <small class="text-muted">Account Status</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="col-lg-4">
+            <div class="card info-card h-100">
+                <div class="card-header py-3">
+                    <h5 class="fw-bold mb-0">
+                        <i class="bi bi-person-vcard me-2" style="color: var(--primary-light);"></i>Contact Info
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-person me-1"></i>Full Name</div>
+                        <div class="info-value">@Model.FullName</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-envelope me-1"></i>Email</div>
+                        <div class="info-value">@Model.Email</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-telephone me-1"></i>Phone</div>
+                        <div class="info-value">
+                            @(string.IsNullOrEmpty(Model.PhoneNumber) ? "Not provided" : Model.PhoneNumber)
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-shield-check me-1"></i>Roles</div>
+                        <div class="info-value">
+                            @foreach (var role in Model.Roles)
+                            {
+                                <span class="role-badge-lg role-@role.ToLower() me-1">@role</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Address Information -->
+        <div class="col-lg-4">
+            <div class="card info-card h-100">
+                <div class="card-header py-3">
+                    <h5 class="fw-bold mb-0">
+                        <i class="bi bi-geo-alt me-2" style="color: var(--primary-light);"></i>Address
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-house me-1"></i>Street Address</div>
+                        <div class="info-value">
+                            @(string.IsNullOrEmpty(Model.Address) ? "Not provided" : Model.Address)
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-building me-1"></i>City</div>
+                        <div class="info-value">
+                            @(string.IsNullOrEmpty(Model.City) ? "Not provided" : Model.City)
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-globe me-1"></i>Country</div>
+                        <div class="info-value">
+                            @(string.IsNullOrEmpty(Model.Country) ? "Not provided" : Model.Country)
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-mailbox me-1"></i>Postal Code</div>
+                        <div class="info-value">
+                            @(string.IsNullOrEmpty(Model.PostalCode) ? "Not provided" : Model.PostalCode)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,100 @@
+@model IEnumerable<StoreWave.DTOs.OrderDto>
+@using StoreWave.Models.Enums
+
+@{
+    ViewData["Title"] = "Manage Orders";
+    var currentStatus = ViewBag.CurrentStatus as OrderStatus?;
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0"><i class="bi bi-list-check me-2"></i>Manage Orders</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Filter by Status -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="d-flex flex-wrap gap-2">
+                <a asp-action="Orders" class="btn @(currentStatus == null ? "btn-primary" : "btn-outline-primary") rounded-pill">
+                    All Orders
+                </a>
+                @foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
+                {
+                    var btnClass = currentStatus == status ? "btn-primary" : "btn-outline-primary";
+                    <a asp-action="Orders" asp-route-status="@status" class="btn @btnClass rounded-pill">
+                        @status
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox display-4"></i>
+                    <p class="mt-2">No orders found.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0">Order #</th>
+                                <th class="border-0">Customer</th>
+                                <th class="border-0">Items</th>
+                                <th class="border-0">Total</th>
+                                <th class="border-0">Status</th>
+                                <th class="border-0">Date</th>
+                                <th class="border-0 text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                var statusBadge = order.Status switch {
+                                    OrderStatus.Pending => "bg-warning text-dark",
+                                    OrderStatus.Confirmed => "bg-info",
+                                    OrderStatus.Processing => "bg-primary",
+                                    OrderStatus.Shipped => "bg-secondary",
+                                    OrderStatus.Delivered => "bg-success",
+                                    OrderStatus.Cancelled => "bg-danger",
+                                    _ => "bg-secondary"
+                                };
+                                <tr>
+                                    <td class="align-middle fw-semibold">@order.OrderNumber</td>
+                                    <td class="align-middle">
+                                        <div>@order.CustomerName</div>
+                                        <small class="text-muted">@order.ShippingCity, @order.ShippingCountry</small>
+                                    </td>
+                                    <td class="align-middle">@order.ItemCount items</td>
+                                    <td class="align-middle fw-bold">$@order.TotalAmount.ToString("N2")</td>
+                                    <td class="align-middle">
+                                        <span class="badge @statusBadge">@order.Status</span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div>@order.OrderDate.ToString("MMM dd, yyyy")</div>
+                                        <small class="text-muted">@order.OrderDate.ToString("hh:mm tt")</small>
+                                    </td>
+                                    <td class="align-middle text-end">
+                                        <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-primary">
+                                            <i class="bi bi-eye me-1"></i>View
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

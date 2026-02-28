@@ -1,0 +1,157 @@
+@model StoreWave.ViewModels.CheckoutViewModel
+@using StoreWave.Models.Enums
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="py-4">
+    <h2 class="fw-bold mb-4">
+        <i class="bi bi-bag-check me-2" style="color: var(--primary-light);"></i>
+        <span class="gradient-text">Checkout</span>
+    </h2>
+    
+    <form asp-action="Checkout" method="post">
+        <div class="row g-4">
+            <!-- Shipping Information -->
+            <div class="col-lg-8">
+                <div class="card border-0 mb-4">
+                    <div class="card-header py-3">
+                        <h5 class="card-title fw-bold mb-0">
+                            <i class="bi bi-truck me-2" style="color: var(--success);"></i>Shipping Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="ShippingAddress" class="form-label fw-semibold"></label>
+                            <textarea asp-for="ShippingAddress" class="form-control" rows="2" placeholder="Enter your full address"></textarea>
+                            <span asp-validation-for="ShippingAddress" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ShippingCity" class="form-label fw-semibold"></label>
+                                <input asp-for="ShippingCity" class="form-control" placeholder="City" />
+                                <span asp-validation-for="ShippingCity" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ShippingCountry" class="form-label fw-semibold"></label>
+                                <input asp-for="ShippingCountry" class="form-control" placeholder="Country" />
+                                <span asp-validation-for="ShippingCountry" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="ShippingPostalCode" class="form-label fw-semibold"></label>
+                            <input asp-for="ShippingPostalCode" class="form-control" placeholder="Postal Code (Optional)" style="max-width: 200px;" />
+                            <span asp-validation-for="ShippingPostalCode" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Method -->
+                <div class="card border-0 mb-4">
+                    <div class="card-header py-3">
+                        <h5 class="card-title fw-bold mb-0">
+                            <i class="bi bi-credit-card me-2" style="color: var(--info);"></i>Payment Method
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach (PaymentMethod method in Enum.GetValues(typeof(PaymentMethod)))
+                            {
+                                var methodId = $"payment_{method}";
+                                var icon = method switch {
+                                    PaymentMethod.CashOnDelivery => "bi-cash",
+                                    PaymentMethod.CreditCard => "bi-credit-card-2-front",
+                                    PaymentMethod.DebitCard => "bi-credit-card",
+                                    PaymentMethod.PayPal => "bi-paypal",
+                                    PaymentMethod.BankTransfer => "bi-bank",
+                                    _ => "bi-wallet"
+                                };
+                                <div class="col-md-6 mb-2">
+                                    <div class="form-check p-3 border rounded @(Model.PaymentMethod == method ? "border-primary" : "")">
+                                        <input class="form-check-input" type="radio" asp-for="PaymentMethod" value="@method" id="@methodId" />
+                                        <label class="form-check-label w-100" for="@methodId" style="cursor: pointer;">
+                                            <i class="bi @icon me-2" style="color: var(--primary-light);"></i>@method.ToString().Replace("OnDelivery", " on Delivery")
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="PaymentMethod" class="text-danger small"></span>
+                    </div>
+                </div>
+                
+                <!-- Order Notes -->
+                <div class="card border-0">
+                    <div class="card-header py-3">
+                        <h5 class="card-title fw-bold mb-0">
+                            <i class="bi bi-chat-left-text me-2" style="color: var(--accent-light);"></i>Order Notes
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Any special instructions for your order (optional)"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="card border-0 sticky-top" style="top: 20px; border: 1px solid rgba(99, 102, 241, 0.25) !important;">
+                    <div class="card-header py-3">
+                        <h5 class="card-title fw-bold mb-0">
+                            <i class="bi bi-bag-check me-2" style="color: var(--primary-light);"></i>Order Summary
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Items -->
+                        <div class="mb-3">
+                            @foreach (var item in Model.Cart.Items)
+                            {
+                                <div class="d-flex align-items-center py-2 border-bottom">
+                                    <img src="@(string.IsNullOrEmpty(item.ProductImageUrl) ? "https://placehold.co/50x50/1e1d3a/6366f1?text=P" : item.ProductImageUrl)" 
+                                         class="rounded me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                    <div class="flex-grow-1">
+                                        <small class="fw-semibold">@item.ProductName</small>
+                                        <br>
+                                        <small class="text-muted">Qty: @item.Quantity × $@item.UnitPrice</small>
+                                    </div>
+                                    <span class="fw-bold" style="color: var(--primary-light);">$@item.TotalPrice</span>
+                                </div>
+                            }
+                        </div>
+                        
+                        <!-- Totals -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Subtotal</span>
+                            <span>$@Model.Cart.SubTotal</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Shipping</span>
+                            <span>$@Model.Cart.ShippingCost</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-bold fs-5">Total</span>
+                            <span class="fw-bold fs-5 gradient-text">$@Model.Cart.Total</span>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold">
+                            <i class="bi bi-lock me-2"></i>Place Order
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary w-100 rounded-pill py-2 mt-2">
+                            <i class="bi bi-arrow-left me-2"></i>Back to Cart
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

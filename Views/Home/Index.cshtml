@@ -1,0 +1,141 @@
+﻿@model StoreWave.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- Hero Section -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card border-0 overflow-hidden hero-gradient" style="border-radius: var(--radius-xl) !important;">
+            <div class="d-flex align-items-center justify-content-center position-relative" style="min-height: 420px;">
+                <div class="text-center p-4 p-md-5" style="z-index: 2;">
+                    <h1 class="display-3 fw-bold mb-3 text-white" style="text-shadow: 0 2px 20px rgba(0,0,0,0.3);">
+                        Welcome to <span class="d-inline-block" style="background: linear-gradient(to right, #fff, #c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">StoreWave</span>
+                    </h1>
+                    <p class="lead mb-4 text-white" style="opacity: 0.9; max-width: 600px; margin: 0 auto;">
+                        Discover Amazing Products at Unbeatable Prices
+                    </p>
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-lg rounded-pill px-5 py-3 fw-bold" 
+                       style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); color: #fff; border: 2px solid rgba(255,255,255,0.3); transition: all 0.3s;">
+                        <i class="bi bi-bag me-2"></i>Shop Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Categories -->
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">
+            <span class="gradient-text">Shop by Category</span>
+        </h2>
+    </div>
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
+        @foreach (var category in Model.Categories)
+        {
+            <div class="col">
+                <a asp-controller="Products" asp-action="Index" asp-route-categoryId="@category.Id" class="text-decoration-none">
+                    <div class="card h-100 text-center py-4" style="cursor: pointer;">
+                        <div class="card-body">
+                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 category-icon-circle" style="width: 64px; height: 64px;">
+                                <i class="bi bi-tag-fill fs-4"></i>
+                            </div>
+                            <h5 class="card-title mb-1">@category.Name</h5>
+                            <small class="text-muted">@category.ProductCount items</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Featured Products -->
+<div class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">
+            <span class="gradient-text">Featured Products</span>
+        </h2>
+        <a asp-controller="Products" asp-action="Index" class="btn btn-outline-primary rounded-pill px-4">
+            View All <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+        @foreach (var product in Model.FeaturedProducts)
+        {
+            <div class="col">
+                <div class="card h-100 product-card">
+                    <div class="position-relative overflow-hidden">
+                        @if (product.IsOnSale)
+                        {
+                            <span class="position-absolute top-0 start-0 badge bg-danger m-3" style="z-index: 2; font-size: 0.8rem;">
+                                <i class="bi bi-lightning-fill me-1"></i>-@product.DiscountPercentage%
+                            </span>
+                        }
+                        <img src="@(string.IsNullOrEmpty(product.ImageUrl) ? "https://placehold.co/400x300/1e1d3a/6366f1?text=Product" : product.ImageUrl)" 
+                             class="card-img-top" alt="@product.Name" style="height: 220px; object-fit: cover;">
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        @* <small class="text-muted mb-1">@product.CategoryName</small> *@
+                        <h5 class="card-title text-truncate">@product.Name</h5>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <div>
+                                @if (product.IsOnSale)
+                                {
+                                    <span class="text-danger fw-bold fs-5">$@product.DiscountPrice</span>
+                                    <small class="text-muted text-decoration-line-through ms-1">$@product.Price</small>
+                                }
+                                else
+                                {
+                                    <span class="fw-bold fs-5" style="color: var(--primary-light);">$@product.Price</span>
+                                }
+                            </div>
+                            <div class="text-warning">
+                                <small><i class="bi bi-star-fill"></i> @product.AverageRating.ToString("F1")</small>
+                            </div>
+                        </div>
+                        <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" 
+                           class="btn btn-primary w-100 mt-3 rounded-pill">
+                            <i class="bi bi-eye me-1"></i>View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- On Sale -->
+<div class="mb-5">
+    <h2 class="fw-bold mb-4">
+        <span class="gradient-text">Hot Deals</span> 🔥
+    </h2>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        @foreach (var product in Model.OnSaleProducts)
+        {
+            <div class="col">
+                <div class="card h-100 flex-row overflow-hidden">
+                    <div class="col-4">
+                        <img src="@(string.IsNullOrEmpty(product.ImageUrl) ? "https://placehold.co/300x300/1e1d3a/f43f5e?text=Sale" : product.ImageUrl)" 
+                             class="img-fluid h-100" alt="@product.Name" style="object-fit: cover; border-radius: 0;">
+                    </div>
+                    <div class="col-8 card-body d-flex flex-column justify-content-center">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text text-truncate">@product.Description</p>
+                        <div class="mb-3">
+                            <span class="text-danger fw-bold fs-4 me-2">$@product.DiscountPrice</span>
+                            <span class="text-muted text-decoration-line-through">$@product.Price</span>
+                        </div>
+                        <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" 
+                           class="btn btn-outline-danger w-50 rounded-pill">
+                            <i class="bi bi-bag-check me-1"></i>Shop Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

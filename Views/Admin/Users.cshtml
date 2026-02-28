@@ -1,0 +1,284 @@
+@model StoreWave.ViewModels.AdminUsersListViewModel
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<style>
+    .user-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #fff;
+        flex-shrink: 0;
+        letter-spacing: 0.5px;
+    }
+
+    .avatar-gradient-1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .avatar-gradient-2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+    .avatar-gradient-3 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .avatar-gradient-4 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+    .avatar-gradient-5 { background: linear-gradient(135deg, #fa709a, #fee140); }
+    .avatar-gradient-6 { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+
+    .user-row {
+        transition: all 0.2s ease;
+    }
+
+    .user-row:hover {
+        background: rgba(99, 102, 241, 0.04) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .role-badge {
+        font-size: 0.72rem;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 50px;
+        letter-spacing: 0.3px;
+    }
+
+    .role-admin { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+    .role-supplier { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #1a3a2a; }
+    .role-warehousemanager { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #1a2a3a; }
+    .role-accountant { background: linear-gradient(135deg, #fa709a, #fee140); color: #3a1a1a; }
+    .role-customer { background: rgba(108, 117, 125, 0.15); color: #6c757d; }
+
+    .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .status-active { background-color: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.5); }
+    .status-inactive { background-color: #ef4444; box-shadow: 0 0 6px rgba(239, 68, 68, 0.5); }
+
+    .stats-mini-card {
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .search-box {
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .search-box:focus {
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+</style>
+
+<div class="py-4">
+    <!-- Page Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-2">
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-people-fill me-2" style="color: var(--primary-light);"></i>
+                <span class="gradient-text">User Management</span>
+            </h2>
+            <p class="text-muted mb-0">View and manage all system users</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-3">
+            <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4">
+            <div class="stats-mini-card" style="background: var(--gradient-primary);">
+                <h3 class="fw-bold text-white mb-0">@Model.TotalUsers</h3>
+                <small class="text-white opacity-75">Total Users</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="stats-mini-card" style="background: var(--gradient-success);">
+                <h3 class="fw-bold text-white mb-0">@Model.ActiveUsers</h3>
+                <small class="text-white opacity-75">Active</small>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="stats-mini-card" style="background: linear-gradient(135deg, #ef4444, #f97316);">
+                <h3 class="fw-bold text-white mb-0">@Model.InactiveUsers</h3>
+                <small class="text-white opacity-75">Inactive</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search & Filter -->
+    <div class="card border-0 mb-4">
+        <div class="card-body">
+            <form asp-action="Users" method="get">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-search me-1"></i>Search Users
+                        </label>
+                        <input type="text" name="searchTerm" value="@Model.SearchTerm"
+                               class="form-control search-box" placeholder="Search by name, email, or phone..." />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-funnel me-1"></i>Filter by Role
+                        </label>
+                        <select name="roleFilter" class="form-select" style="border-radius: 12px;">
+                            <option value="">All Roles</option>
+                            @foreach (var role in Model.AvailableRoles)
+                            {
+                                <option value="@role" selected="@(Model.RoleFilter == role)">@role</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <button type="submit" class="btn btn-primary rounded-pill">
+                            <i class="bi bi-filter me-1"></i>Apply
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Active Filters -->
+    @if (!string.IsNullOrEmpty(Model.SearchTerm) || !string.IsNullOrEmpty(Model.RoleFilter))
+    {
+        <div class="mb-3">
+            <span class="text-muted me-2">Active filters:</span>
+            @if (!string.IsNullOrEmpty(Model.SearchTerm))
+            {
+                <span class="badge bg-primary rounded-pill me-1">
+                    <i class="bi bi-search me-1"></i>"@Model.SearchTerm"
+                </span>
+            }
+            @if (!string.IsNullOrEmpty(Model.RoleFilter))
+            {
+                <span class="badge bg-info rounded-pill me-1">
+                    <i class="bi bi-person-badge me-1"></i>@Model.RoleFilter
+                </span>
+            }
+            <a asp-action="Users" class="btn btn-sm btn-outline-danger rounded-pill ms-2">
+                <i class="bi bi-x-circle me-1"></i>Clear
+            </a>
+        </div>
+    }
+
+    <!-- Users Table -->
+    <div class="card border-0">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h5 class="card-title fw-bold mb-0">
+                <i class="bi bi-person-lines-fill me-2" style="color: var(--primary-light);"></i>
+                All Users
+                <span class="badge bg-secondary rounded-pill ms-2 fs-7">@Model.Users.Count</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            @if (!Model.Users.Any())
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-person-slash display-4" style="color: var(--text-muted);"></i>
+                    <p class="mt-2 text-muted">No users found matching your criteria.</p>
+                    <a asp-action="Users" class="btn btn-outline-primary rounded-pill mt-2">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>Clear Filters
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;"></th>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Roles</th>
+                                <th>Orders</th>
+                                <th>Status</th>
+                                <th>Joined</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ var index = 0; }
+                            @foreach (var user in Model.Users)
+                            {
+                                var gradientClass = $"avatar-gradient-{(index % 6) + 1}";
+                                <tr class="user-row">
+                                    <td>
+                                        <div class="user-avatar @gradientClass">
+                                            @user.Initials
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="fw-semibold">@user.FullName</div>
+                                        @if (!string.IsNullOrEmpty(user.City))
+                                        {
+                                            <small class="text-muted">
+                                                <i class="bi bi-geo-alt me-1"></i>@user.City@(user.Country != null ? $", {user.Country}" : "")
+                                            </small>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">@user.Email</span>
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(user.PhoneNumber))
+                                        {
+                                            <span>@user.PhoneNumber</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">—</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (var role in user.Roles)
+                                        {
+                                            <span class="role-badge role-@role.ToLower() me-1">@role</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="fw-semibold" style="color: var(--primary-light);">@user.TotalOrders</span>
+                                    </td>
+                                    <td>
+                                        @if (user.IsActive)
+                                        {
+                                            <span class="status-dot status-active me-1"></span>
+                                            <small class="text-success fw-semibold">Active</small>
+                                        }
+                                        else
+                                        {
+                                            <span class="status-dot status-inactive me-1"></span>
+                                            <small class="text-danger fw-semibold">Inactive</small>
+                                        }
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">@user.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                    </td>
+                                    <td class="text-end">
+                                        <a asp-action="UserDetails" asp-route-id="@user.Id"
+                                           class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                                            <i class="bi bi-eye me-1"></i>View
+                                        </a>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

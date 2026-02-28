@@ -1,0 +1,549 @@
+@model StoreWave.ViewModels.ProfileViewModel
+
+@using Microsoft.AspNetCore.Identity
+@using StoreWave.Models.Entities
+@inject UserManager<Customer> UserManager
+
+@{
+    ViewData["Title"] = "My Profile";
+    var user = await UserManager.GetUserAsync(User);
+    var roles = user != null ? await UserManager.GetRolesAsync(user) : new List<string>();
+    var initials = $"{(Model.FirstName?.Length > 0 ? Model.FirstName[0] : '?')}{(Model.LastName?.Length > 0 ? Model.LastName[0] : '?')}".ToUpper();
+}
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<style>
+    .profile-hero {
+        background: var(--gradient-primary);
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .profile-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 50%;
+    }
+
+    .profile-avatar-lg {
+        width: 85px;
+        height: 85px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.8rem;
+        color: #fff;
+        background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        border: 3px solid rgba(255,255,255,0.25);
+        letter-spacing: 1px;
+    }
+
+    .role-badge-lg {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 4px 14px;
+        border-radius: 50px;
+        letter-spacing: 0.3px;
+    }
+
+    .role-admin { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+    .role-supplier { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #1a3a2a; }
+    .role-warehousemanager { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #1a2a3a; }
+    .role-accountant { background: linear-gradient(135deg, #fa709a, #fee140); color: #3a1a1a; }
+    .role-customer { background: rgba(108, 117, 125, 0.15); color: #6c757d; }
+
+    .profile-form-card {
+        border: none;
+        border-radius: 14px;
+    }
+
+    .profile-form-card .form-control {
+        border-radius: 10px;
+        padding: 0.6rem 0.9rem;
+        transition: all 0.2s ease;
+    }
+
+    .profile-form-card .form-control:focus {
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .profile-form-card .form-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        color: var(--text-muted);
+    }
+
+    .section-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        color: #fff;
+        margin-right: 0.5rem;
+    }
+
+    /* Map Styles */
+    #profileMap {
+        height: 350px;
+        border-radius: 12px;
+        border: 2px solid rgba(99, 102, 241, 0.15);
+        z-index: 1;
+    }
+
+    .map-search-box {
+        position: relative;
+    }
+
+    .map-search-box .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background: var(--card-bg, #fff);
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 0 0 10px 10px;
+        max-height: 200px;
+        overflow-y: auto;
+        display: none;
+    }
+
+    .map-search-box .search-results.show {
+        display: block;
+    }
+
+    .map-search-box .search-result-item {
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 0.85rem;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        transition: background 0.15s;
+    }
+
+    .map-search-box .search-result-item:hover {
+        background: rgba(99, 102, 241, 0.08);
+    }
+
+    .map-hint {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        margin-top: 0.4rem;
+    }
+
+    .locate-btn {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        z-index: 500;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid rgba(99,102,241,0.3);
+        background: var(--card-bg, #fff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        transition: all 0.2s;
+    }
+
+    .locate-btn:hover {
+        background: rgba(99, 102, 241, 0.1);
+        transform: scale(1.1);
+    }
+</style>
+
+<div class="py-4">
+    <!-- Profile Hero -->
+    <div class="profile-hero text-white">
+        <div class="d-flex flex-column flex-md-row align-items-center gap-4 position-relative" style="z-index:1;">
+            <div class="profile-avatar-lg">
+                @initials
+            </div>
+            <div class="text-center text-md-start">
+                <h2 class="fw-bold mb-1">@Model.FirstName @Model.LastName</h2>
+                <p class="mb-2 opacity-75">
+                    <i class="bi bi-envelope me-1"></i>@Model.Email
+                </p>
+                <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start">
+                    @foreach (var role in roles)
+                    {
+                        <span class="role-badge-lg role-@role.ToLower()">
+                            <i class="bi bi-shield-check me-1"></i>@role
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <form asp-action="Profile" method="post" id="profileForm">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <!-- Hidden fields for lat/lng -->
+        <input type="hidden" asp-for="Latitude" id="latitude" />
+        <input type="hidden" asp-for="Longitude" id="longitude" />
+
+        <div class="row g-4">
+            <!-- Personal Information -->
+            <div class="col-lg-6">
+                <div class="card profile-form-card h-100">
+                    <div class="card-header py-3 d-flex align-items-center">
+                        <span class="section-icon" style="background: var(--gradient-primary);">
+                            <i class="bi bi-person"></i>
+                        </span>
+                        <h5 class="fw-bold mb-0">Personal Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">
+                                <i class="bi bi-envelope me-1"></i>Email
+                            </label>
+                            <input asp-for="Email" class="form-control" readonly
+                                   style="background: rgba(99,102,241,0.04);" />
+                            <small class="text-muted"><i class="bi bi-lock me-1"></i>Email cannot be changed directly.</small>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="FirstName" class="form-label">
+                                    <i class="bi bi-person me-1"></i>First Name
+                                </label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="LastName" class="form-label">
+                                    <i class="bi bi-person me-1"></i>Last Name
+                                </label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-0">
+                            <label asp-for="PhoneNumber" class="form-label">
+                                <i class="bi bi-telephone me-1"></i>Phone Number
+                            </label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address Information -->
+            <div class="col-lg-6">
+                <div class="card profile-form-card h-100">
+                    <div class="card-header py-3 d-flex align-items-center">
+                        <span class="section-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+                            <i class="bi bi-geo-alt"></i>
+                        </span>
+                        <h5 class="fw-bold mb-0">Address</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label">
+                                <i class="bi bi-house me-1"></i>Street Address
+                            </label>
+                            <input asp-for="Address" class="form-control" id="addressField" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="City" class="form-label">
+                                    <i class="bi bi-building me-1"></i>City
+                                </label>
+                                <input asp-for="City" class="form-control" id="cityField" />
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Country" class="form-label">
+                                    <i class="bi bi-globe me-1"></i>Country
+                                </label>
+                                <input asp-for="Country" class="form-control" id="countryField" />
+                                <span asp-validation-for="Country" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-0">
+                            <label asp-for="PostalCode" class="form-label">
+                                <i class="bi bi-mailbox me-1"></i>Postal Code
+                            </label>
+                            <input asp-for="PostalCode" class="form-control" id="postalCodeField" />
+                            <span asp-validation-for="PostalCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Section -->
+            <div class="col-12">
+                <div class="card profile-form-card">
+                    <div class="card-header py-3 d-flex align-items-center">
+                        <span class="section-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                            <i class="bi bi-map"></i>
+                        </span>
+                        <h5 class="fw-bold mb-0">Pick Your Location on Map</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Search Box -->
+                        <div class="map-search-box mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text" style="border-radius: 10px 0 0 10px;">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" id="mapSearchInput" class="form-control"
+                                       placeholder="Search for an address..." autocomplete="off"
+                                       style="border-radius: 0 10px 10px 0;" />
+                            </div>
+                            <div id="searchResults" class="search-results"></div>
+                        </div>
+
+                        <!-- Map -->
+                        <div style="position: relative;">
+                            <div id="profileMap"></div>
+                            <button type="button" class="locate-btn" id="locateMeBtn" title="Use my current location">
+                                <i class="bi bi-crosshair" style="color: var(--primary-light, #6366f1); font-size: 1.1rem;"></i>
+                            </button>
+                        </div>
+
+                        <div class="map-hint mt-2">
+                            <i class="bi bi-info-circle me-1"></i>
+                            <strong>Click on the map</strong> to pick your location, or use the search box above.
+                            Address fields will be filled automatically.
+                        </div>
+
+                        <!-- Coordinates Display -->
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <small class="text-muted">
+                                    <i class="bi bi-geo me-1"></i>Lat: <span id="latDisplay">@(Model.Latitude?.ToString("F6") ?? "Not set")</span>
+                                </small>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted">
+                                    <i class="bi bi-geo me-1"></i>Lng: <span id="lngDisplay">@(Model.Longitude?.ToString("F6") ?? "Not set")</span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex flex-wrap gap-3 mt-4 justify-content-center">
+            <button type="submit" class="btn btn-primary px-5 rounded-pill">
+                <i class="bi bi-check-circle me-2"></i>Update Profile
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        (function () {
+            // Default center (Cairo, Egypt) — fallback
+            const defaultLat = @(Model.Latitude?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "30.0444");
+            const defaultLng = @(Model.Longitude?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "31.2357");
+            const hasExistingLocation = @((Model.Latitude.HasValue && Model.Longitude.HasValue).ToString().ToLower());
+            const defaultZoom = hasExistingLocation ? 16 : 6;
+
+            // Initialize Map
+            const map = L.map('profileMap').setView([defaultLat, defaultLng], defaultZoom);
+
+            // OpenStreetMap Tile Layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Custom marker icon
+            const markerIcon = L.icon({
+                iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+                shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+
+            // Current marker
+            let marker = null;
+
+            if (hasExistingLocation) {
+                marker = L.marker([defaultLat, defaultLng], { icon: markerIcon }).addTo(map);
+                marker.bindPopup('<strong>Your saved location</strong>').openPopup();
+            }
+
+            // Place marker and reverse geocode
+            function placeMarker(lat, lng, skipGeocode = false) {
+                if (marker) map.removeLayer(marker);
+                marker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
+
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+                document.getElementById('latDisplay').textContent = lat.toFixed(6);
+                document.getElementById('lngDisplay').textContent = lng.toFixed(6);
+
+                if (!skipGeocode) {
+                    reverseGeocode(lat, lng);
+                }
+            }
+
+            // Reverse Geocode using Nominatim
+            function reverseGeocode(lat, lng) {
+                const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1&accept-language=en`;
+
+                fetch(url, {
+                    headers: { 'User-Agent': 'StoreWave-App' }
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data && data.address) {
+                        const addr = data.address;
+
+                        // Build street address
+                        const streetParts = [];
+                        if (addr.house_number) streetParts.push(addr.house_number);
+                        if (addr.road) streetParts.push(addr.road);
+                        if (addr.neighbourhood) streetParts.push(addr.neighbourhood);
+                        if (addr.suburb) streetParts.push(addr.suburb);
+                        const street = streetParts.join(', ') || data.display_name?.split(',').slice(0, 2).join(',') || '';
+
+                        const city = addr.city || addr.town || addr.village || addr.state_district || addr.state || '';
+                        const country = addr.country || '';
+                        const postalCode = addr.postcode || '';
+
+                        document.getElementById('addressField').value = street;
+                        document.getElementById('cityField').value = city;
+                        document.getElementById('countryField').value = country;
+                        document.getElementById('postalCodeField').value = postalCode;
+
+                        marker.bindPopup(`<strong>${street || 'Selected Location'}</strong><br>${city}, ${country}`).openPopup();
+                    }
+                })
+                .catch(err => console.warn('Reverse geocoding failed:', err));
+            }
+
+            // Click on map to set location
+            map.on('click', function (e) {
+                placeMarker(e.latlng.lat, e.latlng.lng);
+                map.flyTo(e.latlng, Math.max(map.getZoom(), 15));
+            });
+
+            // Search functionality
+            const searchInput = document.getElementById('mapSearchInput');
+            const searchResults = document.getElementById('searchResults');
+            let searchTimeout;
+
+            searchInput.addEventListener('input', function () {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim();
+                if (query.length < 3) {
+                    searchResults.classList.remove('show');
+                    return;
+                }
+
+                searchTimeout = setTimeout(() => {
+                    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&addressdetails=1&accept-language=en`;
+
+                    fetch(url, {
+                        headers: { 'User-Agent': 'StoreWave-App' }
+                    })
+                    .then(r => r.json())
+                    .then(results => {
+                        searchResults.innerHTML = '';
+                        if (results.length === 0) {
+                            searchResults.innerHTML = '<div class="search-result-item text-muted"><i class="bi bi-info-circle me-1"></i>No results found</div>';
+                        } else {
+                            results.forEach(result => {
+                                const item = document.createElement('div');
+                                item.className = 'search-result-item';
+                                item.innerHTML = `<i class="bi bi-geo-alt me-1" style="color: var(--primary-light, #6366f1);"></i>${result.display_name}`;
+                                item.addEventListener('click', () => {
+                                    const lat = parseFloat(result.lat);
+                                    const lng = parseFloat(result.lon);
+                                    placeMarker(lat, lng);
+                                    map.flyTo([lat, lng], 16);
+                                    searchResults.classList.remove('show');
+                                    searchInput.value = result.display_name;
+                                });
+                                searchResults.appendChild(item);
+                            });
+                        }
+                        searchResults.classList.add('show');
+                    })
+                    .catch(err => console.warn('Search failed:', err));
+                }, 400);
+            });
+
+            // Close search results when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.map-search-box')) {
+                    searchResults.classList.remove('show');
+                }
+            });
+
+            // Locate Me Button
+            document.getElementById('locateMeBtn').addEventListener('click', function () {
+                if ('geolocation' in navigator) {
+                    this.innerHTML = '<div class="spinner-border spinner-border-sm" style="color: var(--primary-light, #6366f1);"></div>';
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => {
+                            const lat = pos.coords.latitude;
+                            const lng = pos.coords.longitude;
+                            placeMarker(lat, lng);
+                            map.flyTo([lat, lng], 16);
+                            this.innerHTML = '<i class="bi bi-crosshair" style="color: var(--primary-light, #6366f1); font-size: 1.1rem;"></i>';
+                        },
+                        (err) => {
+                            alert('Could not get your location. Please allow location access in your browser.');
+                            this.innerHTML = '<i class="bi bi-crosshair" style="color: var(--primary-light, #6366f1); font-size: 1.1rem;"></i>';
+                        },
+                        { enableHighAccuracy: true, timeout: 10000 }
+                    );
+                } else {
+                    alert('Geolocation is not supported by your browser.');
+                }
+            });
+
+            // Fix map rendering issues when in tabs or hidden
+            setTimeout(() => map.invalidateSize(), 300);
+        })();
+    </script>
+}

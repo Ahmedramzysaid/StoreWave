@@ -1,0 +1,190 @@
+@model StoreWave.ViewModels.AccountantDashboardViewModel
+
+@{
+    ViewData["Title"] = "Financial Dashboard";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 fw-bold text-primary">
+                <i class="bi bi-graph-up me-2"></i>Financial Dashboard
+            </h1>
+            <p class="text-muted mb-0">Revenue and sales analytics</p>
+        </div>
+        <a asp-action="SalesReport" class="btn btn-primary">
+            <i class="bi bi-file-earmark-text me-1"></i>Sales Report
+        </a>
+    </div>
+
+    <!-- Main Stats -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-currency-dollar display-4"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h2 class="mb-0">$@Model.TotalRevenue.ToString("N2")</h2>
+                            <p class="mb-0 opacity-75">Total Revenue</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-bag-check display-4"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h2 class="mb-0">@Model.TotalOrders</h2>
+                            <p class="mb-0 opacity-75">Total Orders</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-calculator display-4"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h2 class="mb-0">$@Model.AverageOrderValue.ToString("N2")</h2>
+                            <p class="mb-0 opacity-75">Avg Order Value</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm h-100 bg-warning text-dark">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-calendar-month display-4"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h2 class="mb-0">$@Model.ThisMonthSales.ToString("N2")</h2>
+                            <p class="mb-0">This Month</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Today's Performance -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-sun me-2"></i>Today's Performance
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <h3 class="text-success mb-1">$@Model.TodaysSales.ToString("N2")</h3>
+                            <p class="text-muted mb-0">Today's Sales</p>
+                        </div>
+                        <div class="col-6">
+                            <h3 class="text-primary mb-1">@Model.TodaysOrders</h3>
+                            <p class="text-muted mb-0">Today's Orders</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="bi bi-lightning me-2"></i>Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-action="SalesReport" class="btn btn-outline-primary">
+                            <i class="bi bi-file-earmark-bar-graph me-2"></i>Generate Sales Report
+                        </a>
+                        <a asp-action="Revenue" class="btn btn-outline-success">
+                            <i class="bi bi-graph-up me-2"></i>View Monthly Revenue
+                        </a>
+                        <a asp-action="PaymentMethods" class="btn btn-outline-info">
+                            <i class="bi bi-credit-card me-2"></i>Payment Method Stats
+                        </a>
+                        <a asp-controller="Account" asp-action="Profile" class="btn btn-outline-success">
+                            <i class="bi bi-person-circle me-2"></i>My Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history me-2"></i>Recent Orders</h5>
+            <a asp-action="SalesReport" class="btn btn-sm btn-outline-primary">View All</a>
+        </div>
+        <div class="card-body p-0">
+            @if (Model.RecentOrders.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Order #</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model.RecentOrders)
+                            {
+                                <tr>
+                                    <td><span class="fw-medium">@order.OrderNumber</span></td>
+                                    <td>@order.CustomerName</td>
+                                    <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                                    <td>
+                                        <span class="badge @(order.Status.ToString() == "Delivered" ? "bg-success" : 
+                                                           order.Status.ToString() == "Cancelled" ? "bg-danger" :
+                                                           order.Status.ToString() == "Pending" ? "bg-warning text-dark" : "bg-info")">
+                                            @order.Status
+                                        </span>
+                                    </td>
+                                    <td class="fw-bold text-success">$@order.TotalAmount.ToString("N2")</td>
+                                    <td>
+                                        <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox display-4"></i>
+                    <p class="mt-2">No orders yet.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
