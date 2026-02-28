@@ -115,6 +115,8 @@ StoreWave implements a granular **Role-Based Access Control (RBAC)** system with
 
 StoreWave follows a classic **3-Tier Architecture** separating the Presentation, Business Logic, and Data layers:
 
+![System Architecture](wwwroot/ReadMeImages/system_architecture_1772316242185.png)
+
 ### Architecture Tiers
 
 ```mermaid
@@ -277,6 +279,8 @@ graph LR
 ## 🔄 Data Flow in Backend
 
 This diagram illustrates how data flows through the StoreWave backend when processing a request:
+
+![Data Flow Diagram](wwwroot/ReadMeImages/data_flow_1772316273168.png)
 
 ### Request Processing Pipeline
 
@@ -702,6 +706,8 @@ classDiagram
 ## 🌐 Hosting & Deployment (MonsterASP)
 
 StoreWave is deployed on **MonsterASP.NET** hosting platform:
+
+![Hosting Diagram](wwwroot/ReadMeImages/hosting_diagram_1772316316471.png)
 
 ### Deployment Architecture
 
