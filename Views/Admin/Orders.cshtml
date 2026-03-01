@@ -70,19 +70,19 @@
                                     _ => "bg-secondary"
                                 };
                                 <tr>
-                                    <td class="align-middle fw-semibold">@order.OrderNumber</td>
+                                    <td class="align-middle fw-semibold" style="color: #a5b4fc;">@order.OrderNumber</td>
                                     <td class="align-middle">
-                                        <div>@order.CustomerName</div>
-                                        <small class="text-muted">@order.ShippingCity, @order.ShippingCountry</small>
+                                        <div style="color: #e0e7ff;">@order.CustomerName</div>
+                                        <small style="color: var(--text-muted);">@order.ShippingCity, @order.ShippingCountry</small>
                                     </td>
-                                    <td class="align-middle">@order.ItemCount items</td>
-                                    <td class="align-middle fw-bold">$@order.TotalAmount.ToString("N2")</td>
+                                    <td class="align-middle" style="color: #c4b5fd;">@order.ItemCount items</td>
+                                    <td class="align-middle fw-bold" style="color: var(--success) !important;">$@order.TotalAmount.ToString("N2")</td>
                                     <td class="align-middle">
                                         <span class="badge @statusBadge">@order.Status</span>
                                     </td>
                                     <td class="align-middle">
-                                        <div>@order.OrderDate.ToString("MMM dd, yyyy")</div>
-                                        <small class="text-muted">@order.OrderDate.ToString("hh:mm tt")</small>
+                                        <div style="color: #e0e7ff;">@order.OrderDate.ToString("MMM dd, yyyy")</div>
+                                        <small style="color: var(--text-muted);">@order.OrderDate.ToString("hh:mm tt")</small>
                                     </td>
                                     <td class="align-middle text-end">
                                         <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-primary">

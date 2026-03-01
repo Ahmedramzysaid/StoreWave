@@ -1,11 +1,55 @@
 wwwroot\css\site.css
 wwwroot\favicon.ico
+wwwroot\images\products\aibook.png
+wwwroot\images\products\backpack.png
+wwwroot\images\products\bands.png
+wwwroot\images\products\basketball.png
+wwwroot\images\products\belt.png
+wwwroot\images\products\blanket.png
+wwwroot\images\products\candles.png
+wwwroot\images\products\charger.png
+wwwroot\images\products\chinos.png
+wwwroot\images\products\cleancode.png
+wwwroot\images\products\cloudbook.png
 wwwroot\images\products\csharpbook.png
+wwwroot\images\products\cushions.png
+wwwroot\images\products\databasebook.png
+wwwroot\images\products\denimjacket.png
+wwwroot\images\products\designpatterns.png
+wwwroot\images\products\desklamp.png
 wwwroot\images\products\dress.png
+wwwroot\images\products\dsabook.png
+wwwroot\images\products\dumbbells.png
+wwwroot\images\products\earbuds.png
+wwwroot\images\products\fitnesstracker.png
+wwwroot\images\products\foamroller.png
+wwwroot\images\products\gardentools.png
 wwwroot\images\products\headphones.png
+wwwroot\images\products\herbgarden.png
+wwwroot\images\products\jsbook.png
+wwwroot\images\products\jumprope.png
+wwwroot\images\products\keyboard.png
 wwwroot\images\products\laptopstand.png
+wwwroot\images\products\mouse.png
+wwwroot\images\products\organizer.png
+wwwroot\images\products\parka.png
+wwwroot\images\products\plantpots.png
+wwwroot\images\products\polo.png
+wwwroot\images\products\pragmatic.png
+wwwroot\images\products\scarf.png
 wwwroot\images\products\shirt.png
 wwwroot\images\products\smartwatch.png
+wwwroot\images\products\sneakers.png
+wwwroot\images\products\solarlights.png
+wwwroot\images\products\speaker.png
+wwwroot\images\products\sunglasses.png
+wwwroot\images\products\tennisracket.png
+wwwroot\images\products\usbhub.png
+wwwroot\images\products\wallart.png
+wwwroot\images\products\waterbottle.png
+wwwroot\images\products\webcam.png
+wwwroot\images\products\webdesignbook.png
+wwwroot\images\products\yogamat.png
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
@@ -67,65 +111,68 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\css\site.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\favicon.ico
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\js\site.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation\dist\additional-methods.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation\dist\jquery.validate.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation\LICENSE.md
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.min.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.min.map
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.slim.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.slim.min.js
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.slim.min.map
+wwwroot\ReadMeImages\data_flow_1772316273168.png
+wwwroot\ReadMeImages\hosting_diagram_1772316316471.png
+wwwroot\ReadMeImages\system_architecture_1772316242185.png
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\LICENSE.txt
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.slim.min.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.slim.min.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.slim.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.min.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.min.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation\LICENSE.md
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation\dist\jquery.validate.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation\dist\additional-methods.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\js\site.js
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\favicon.ico
+C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\css\site.css

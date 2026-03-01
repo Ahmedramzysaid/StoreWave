@@ -546,9 +546,13 @@ a:hover { color: var(--primary-light); }
 
 /* ---------- Tables ---------- */
 .table {
-    color: var(--text-primary);
+    color: var(--text-primary) !important;
     --bs-table-bg: transparent;
-    --bs-table-hover-bg: rgba(99, 102, 241, 0.06);
+    --bs-table-color: var(--text-primary);
+    --bs-table-hover-bg: rgba(99, 102, 241, 0.08);
+    --bs-table-hover-color: #fff;
+    --bs-table-striped-bg: rgba(99, 102, 241, 0.04);
+    --bs-table-striped-color: var(--text-primary);
 }
 
 .table thead {
@@ -557,7 +561,7 @@ a:hover { color: var(--primary-light); }
 
 .table thead th {
     background: rgba(99, 102, 241, 0.08) !important;
-    color: var(--text-secondary) !important;
+    color: var(--primary-light) !important;
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.78rem;
@@ -568,17 +572,33 @@ a:hover { color: var(--primary-light); }
 
 .table tbody tr {
     border-bottom: 1px solid rgba(99, 102, 241, 0.08);
-    transition: background var(--transition-fast);
+    transition: all var(--transition-fast);
 }
 
 .table tbody tr:hover {
-    background: rgba(99, 102, 241, 0.06) !important;
+    background: rgba(99, 102, 241, 0.08) !important;
+    box-shadow: inset 3px 0 0 var(--primary-light);
 }
 
 .table td {
     padding: 0.85rem 1rem !important;
     border: none !important;
     vertical-align: middle;
+    color: var(--text-primary) !important;
+}
+
+.table td.fw-semibold,
+.table td .fw-semibold {
+    color: #e0e7ff !important;
+}
+
+.table td.fw-bold,
+.table td .fw-bold {
+    color: var(--primary-light) !important;
+}
+
+.table td small.text-muted {
+    color: var(--text-secondary) !important;
 }
 
 .bg-light {

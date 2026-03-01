@@ -10,11 +10,13 @@ namespace StoreWave.Controllers
     public class OrdersController : Controller
     {
         private readonly IOrderService _orderService;
+        private readonly IChatService _chatService;
         private readonly UserManager<Customer> _userManager;
 
-        public OrdersController(IOrderService orderService, UserManager<Customer> userManager)
+        public OrdersController(IOrderService orderService, IChatService chatService, UserManager<Customer> userManager)
         {
             _orderService = orderService;
+            _chatService = chatService;
             _userManager = userManager;
         }
 
@@ -40,6 +42,12 @@ namespace StoreWave.Controllers
             {
                 return NotFound();
             }
+
+            // Load existing chat messages so the customer can see previous conversations
+            var chatMessages = await _chatService.GetMessagesForOrderAsync(id);
+            ViewBag.ChatMessages = chatMessages;
+            ViewBag.CurrentUserId = userId;
+
             return View(order);
         }
     }

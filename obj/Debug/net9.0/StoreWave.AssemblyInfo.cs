@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("StoreWave")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a09e8a4a8d19ffc27c1aef640170e16f61f664b2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2ba9ef19e8f0f34208c147012eea6e9a101d0b67")]
 [assembly: System.Reflection.AssemblyProductAttribute("StoreWave")]
 [assembly: System.Reflection.AssemblyTitleAttribute("StoreWave")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

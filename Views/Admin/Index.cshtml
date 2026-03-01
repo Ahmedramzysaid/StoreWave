@@ -153,13 +153,13 @@
                                             _ => "bg-secondary"
                                         };
                                         <tr>
-                                            <td class="fw-semibold">@order.OrderNumber</td>
-                                            <td>@order.CustomerName</td>
+                                            <td class="fw-semibold" style="color: #a5b4fc;">@order.OrderNumber</td>
+                                            <td style="color: #e0e7ff;">@order.CustomerName</td>
                                             <td class="fw-semibold" style="color: var(--primary-light);">$@order.TotalAmount.ToString("N2")</td>
                                             <td>
                                                 <span class="badge @statusBadge">@order.Status</span>
                                             </td>
-                                            <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                                            <td style="color: #c4b5fd;">@order.OrderDate.ToString("MMM dd, yyyy")</td>
                                             <td class="text-end">
                                                 <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary rounded-pill">
                                                     <i class="bi bi-eye"></i>
