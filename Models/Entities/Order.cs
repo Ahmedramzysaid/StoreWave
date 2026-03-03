@@ -46,11 +46,15 @@ namespace StoreWave.Models.Entities
 
         public DateTime? DeliveredDate { get; set; }
 
+        public DateTime? PickedUpDate { get; set; }
+
         // Foreign Keys
         public int CustomerId { get; set; }
+        public int? DriverId { get; set; }
 
         // Navigation Properties
         public virtual Customer Customer { get; set; } = null!;
+        public virtual Customer? Driver { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public virtual ICollection<ChatMessage> ChatMessages { get; set; } = new List<ChatMessage>();
 

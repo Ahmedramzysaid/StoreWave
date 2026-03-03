@@ -11,6 +11,8 @@ namespace StoreWave.Services.Interfaces
         Task<OrderDto?> GetOrderByNumberAsync(string orderNumber);
         Task<OrderDto> CreateOrderAsync(int customerId, OrderDto orderDto);
         Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus status);
+        Task<bool> AssignDriverAsync(int orderId, int driverId);
+        Task<IEnumerable<OrderDto>> GetOrdersByDriverAsync(int driverId);
         Task<IEnumerable<OrderDto>> GetRecentOrdersAsync();
         Task<decimal> GetTotalSalesAsync();
         Task<int> GetTotalOrdersAsync();

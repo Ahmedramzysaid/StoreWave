@@ -59,13 +59,23 @@ namespace StoreWave.DTOs
         [DataType(DataType.DateTime)]
         public DateTime? DeliveredDate { get; set; }
 
+        [Display(Name = "Picked Up Date")]
+        [DataType(DataType.DateTime)]
+        public DateTime? PickedUpDate { get; set; }
+
         [Required(ErrorMessage = "Customer is required")]
         [Display(Name = "Customer")]
         public int CustomerId { get; set; }
 
+        [Display(Name = "Driver")]
+        public int? DriverId { get; set; }
+
         // Display properties
         [Display(Name = "Customer")]
         public string? CustomerName { get; set; }
+
+        [Display(Name = "Driver")]
+        public string? DriverName { get; set; }
 
         [Display(Name = "Items")]
         public int ItemCount { get; set; }

@@ -168,7 +168,6 @@ C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\D
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\scopedcss\bundle\StoreWave.styles.css
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\scopedcss\projectbundle\StoreWave.bundle.scp.css
-C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\compressed\hfv021copr-{0}-n33smgqkxm-n33smgqkxm.gz
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\compressed\4uxy2qq6q5-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\compressed\ko08eg3wej-{0}-ucpreljb41-ucpreljb41.gz
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\compressed\4uuq3yx6f5-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -243,4 +242,5 @@ C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\D
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\StoreWave.pdb
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\StoreWave.genruntimeconfig.cache
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\ref\StoreWave.dll
+c:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\compressed\hfv021copr-{0}-4v2ia35xb0-4v2ia35xb0.gz
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

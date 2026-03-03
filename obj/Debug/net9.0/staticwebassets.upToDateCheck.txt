@@ -111,6 +111,9 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\ReadMeImages\data_flow_1772316273168.png
+wwwroot\ReadMeImages\hosting_diagram_1772316316471.png
+wwwroot\ReadMeImages\system_architecture_1772316242185.png
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\css\site.css
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\favicon.ico
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\js\site.js

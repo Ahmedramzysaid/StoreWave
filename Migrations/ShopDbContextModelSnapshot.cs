@@ -155,7 +155,7 @@ namespace StoreWave.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.CartItem", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.CartItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -185,7 +185,7 @@ namespace StoreWave.Migrations
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Category", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -261,7 +261,7 @@ namespace StoreWave.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.ChatMessage", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.ChatMessage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -300,7 +300,7 @@ namespace StoreWave.Migrations
                     b.ToTable("ChatMessages");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Customer", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Customer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -406,7 +406,7 @@ namespace StoreWave.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Order", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -419,6 +419,9 @@ namespace StoreWave.Migrations
 
                     b.Property<DateTime?>("DeliveredDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("DriverId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(500)
@@ -434,6 +437,9 @@ namespace StoreWave.Migrations
 
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("PickedUpDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("ShippedDate")
                         .HasColumnType("datetime2");
@@ -470,6 +476,8 @@ namespace StoreWave.Migrations
 
                     b.HasIndex("CustomerId");
 
+                    b.HasIndex("DriverId");
+
                     b.HasIndex("OrderDate");
 
                     b.HasIndex("OrderNumber")
@@ -480,7 +488,7 @@ namespace StoreWave.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.OrderItem", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -512,7 +520,7 @@ namespace StoreWave.Migrations
                     b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Product", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1252,7 +1260,7 @@ namespace StoreWave.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Review", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Review", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1304,7 +1312,7 @@ namespace StoreWave.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("ShopSmart.Models.Entities.Customer", null)
+                    b.HasOne("StoreWave.Models.Entities.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1313,7 +1321,7 @@ namespace StoreWave.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("ShopSmart.Models.Entities.Customer", null)
+                    b.HasOne("StoreWave.Models.Entities.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1328,7 +1336,7 @@ namespace StoreWave.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShopSmart.Models.Entities.Customer", null)
+                    b.HasOne("StoreWave.Models.Entities.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1337,22 +1345,22 @@ namespace StoreWave.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("ShopSmart.Models.Entities.Customer", null)
+                    b.HasOne("StoreWave.Models.Entities.Customer", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.CartItem", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.CartItem", b =>
                 {
-                    b.HasOne("ShopSmart.Models.Entities.Customer", "Customer")
+                    b.HasOne("StoreWave.Models.Entities.Customer", "Customer")
                         .WithMany("CartItems")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShopSmart.Models.Entities.Product", "Product")
+                    b.HasOne("StoreWave.Models.Entities.Product", "Product")
                         .WithMany("CartItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1363,15 +1371,15 @@ namespace StoreWave.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.ChatMessage", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.ChatMessage", b =>
                 {
-                    b.HasOne("ShopSmart.Models.Entities.Order", "Order")
+                    b.HasOne("StoreWave.Models.Entities.Order", "Order")
                         .WithMany("ChatMessages")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShopSmart.Models.Entities.Customer", "Sender")
+                    b.HasOne("StoreWave.Models.Entities.Customer", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1382,26 +1390,33 @@ namespace StoreWave.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Order", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Order", b =>
                 {
-                    b.HasOne("ShopSmart.Models.Entities.Customer", "Customer")
+                    b.HasOne("StoreWave.Models.Entities.Customer", "Customer")
                         .WithMany("Orders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("StoreWave.Models.Entities.Customer", "Driver")
+                        .WithMany()
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Driver");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.OrderItem", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.OrderItem", b =>
                 {
-                    b.HasOne("ShopSmart.Models.Entities.Order", "Order")
+                    b.HasOne("StoreWave.Models.Entities.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShopSmart.Models.Entities.Product", "Product")
+                    b.HasOne("StoreWave.Models.Entities.Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1412,15 +1427,15 @@ namespace StoreWave.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Product", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Product", b =>
                 {
-                    b.HasOne("ShopSmart.Models.Entities.Category", "Category")
+                    b.HasOne("StoreWave.Models.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ShopSmart.Models.Entities.Customer", "Supplier")
+                    b.HasOne("StoreWave.Models.Entities.Customer", "Supplier")
                         .WithMany("SupplierProducts")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1430,15 +1445,15 @@ namespace StoreWave.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Review", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Review", b =>
                 {
-                    b.HasOne("ShopSmart.Models.Entities.Customer", "Customer")
+                    b.HasOne("StoreWave.Models.Entities.Customer", "Customer")
                         .WithMany("Reviews")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ShopSmart.Models.Entities.Product", "Product")
+                    b.HasOne("StoreWave.Models.Entities.Product", "Product")
                         .WithMany("Reviews")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1449,12 +1464,12 @@ namespace StoreWave.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Category", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Category", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Customer", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Customer", b =>
                 {
                     b.Navigation("CartItems");
 
@@ -1465,14 +1480,14 @@ namespace StoreWave.Migrations
                     b.Navigation("SupplierProducts");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Order", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Order", b =>
                 {
                     b.Navigation("ChatMessages");
 
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("ShopSmart.Models.Entities.Product", b =>
+            modelBuilder.Entity("StoreWave.Models.Entities.Product", b =>
                 {
                     b.Navigation("CartItems");
 

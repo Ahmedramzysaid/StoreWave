@@ -11,7 +11,7 @@ namespace StoreWave.Data
             var userManager = serviceProvider.GetRequiredService<UserManager<Customer>>();
 
             // Seed Roles
-            string[] roleNames = { "Admin", "Customer", "Supplier", "Accountant", "WarehouseManager" };
+            string[] roleNames = { "Admin", "Customer", "Supplier", "Accountant", "WarehouseManager", "InDriver" };
             foreach (var roleName in roleNames)
             {
                 var roleExist = await roleManager.RoleExistsAsync(roleName);
@@ -116,6 +116,39 @@ namespace StoreWave.Data
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(newWarehouse, "WarehouseManager");
+                }
+            }
+
+            // Seed InDriver Users (3 delivery drivers)
+            var driverData = new[]
+            {
+                new { Email = "driver1@storewave.com", FirstName = "Ahmed", LastName = "Driver" },
+                new { Email = "driver2@storewave.com", FirstName = "Mohamed", LastName = "Driver" },
+                new { Email = "driver3@storewave.com", FirstName = "Ali", LastName = "Driver" }
+            };
+
+            foreach (var driver in driverData)
+            {
+                var driverUser = await userManager.FindByEmailAsync(driver.Email);
+                if (driverUser == null)
+                {
+                    var newDriver = new Customer
+                    {
+                        UserName = driver.Email,
+                        Email = driver.Email,
+                        FirstName = driver.FirstName,
+                        LastName = driver.LastName,
+                        Address = "Delivery Hub",
+                        City = "Cairo",
+                        CreatedAt = DateTime.UtcNow,
+                        IsActive = true,
+                        EmailConfirmed = true
+                    };
+                    var result = await userManager.CreateAsync(newDriver, "Driver123!");
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(newDriver, "InDriver");
+                    }
                 }
             }
         }

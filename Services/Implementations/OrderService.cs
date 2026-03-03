@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using StoreWave.DTOs;
 using StoreWave.Hubs;
@@ -15,13 +16,16 @@ namespace StoreWave.Services.Implementations
         private readonly IMapper _mapper;
         private readonly ICartService _cartService;
         private readonly IHubContext<OrderHub> _hubContext;
+        private readonly UserManager<Customer> _userManager;
 
-        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, ICartService cartService, IHubContext<OrderHub> hubContext)
+        public OrderService(IUnitOfWork unitOfWork, IMapper mapper, ICartService cartService, 
+            IHubContext<OrderHub> hubContext, UserManager<Customer> userManager)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _cartService = cartService;
             _hubContext = hubContext;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<OrderDto>> GetOrdersByCustomerAsync(int customerId)
@@ -89,6 +93,14 @@ namespace StoreWave.Services.Implementations
                 await _unitOfWork.Products.UpdateStockAsync(item.ProductId, item.StockQuantity - item.Quantity);
             }
 
+            // Auto-assign to driver with fewest active orders (round-robin)
+            var nextDriver = await GetNextAvailableDriverAsync();
+            if (nextDriver != null)
+            {
+                order.DriverId = nextDriver.Id;
+                order.Status = OrderStatus.Confirmed;
+            }
+
             await _unitOfWork.Orders.AddAsync(order);
             await _unitOfWork.SaveChangesAsync();
 
@@ -96,10 +108,48 @@ namespace StoreWave.Services.Implementations
             await _cartService.ClearCartAsync(customerId);
 
             // Notify Admins via SignalR
-            // Notify only Admins via SignalR (not all clients)
             await _hubContext.Clients.Group("Admins").SendAsync("ReceiveOrderNotification", order.OrderNumber, order.TotalAmount);
 
+            // Notify assigned driver via SignalR
+            if (order.DriverId.HasValue)
+            {
+                await _hubContext.Clients.Group($"Driver_{order.DriverId.Value}").SendAsync(
+                    "ReceiveNewDelivery",
+                    order.OrderNumber,
+                    order.TotalAmount,
+                    order.ShippingAddress ?? "",
+                    order.ShippingCity ?? "");
+            }
+
             return _mapper.Map<OrderDto>(order);
+        }
+
+        /// <summary>
+        /// Finds the InDriver with the fewest active (non-delivered, non-cancelled) orders.
+        /// This creates a round-robin effect — the least busy driver gets the next order.
+        /// </summary>
+        private async Task<Customer?> GetNextAvailableDriverAsync()
+        {
+            var drivers = await _userManager.GetUsersInRoleAsync("InDriver");
+            if (!drivers.Any()) return null;
+
+            // For each driver, count their active orders (not Delivered, not Cancelled)
+            var driverWorkloads = new List<(Customer Driver, int ActiveCount)>();
+
+            foreach (var driver in drivers)
+            {
+                var driverOrders = await _unitOfWork.Orders.GetOrdersByDriverAsync(driver.Id);
+                var activeCount = driverOrders.Count(o => 
+                    o.Status != OrderStatus.Delivered && o.Status != OrderStatus.Cancelled);
+                driverWorkloads.Add((driver, activeCount));
+            }
+
+            // Pick the driver with the fewest active orders
+            return driverWorkloads
+                .OrderBy(d => d.ActiveCount)
+                .ThenBy(d => d.Driver.Id) // tiebreaker: lowest ID first for consistency
+                .First()
+                .Driver;
         }
 
         public async Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus status)
@@ -109,7 +159,9 @@ namespace StoreWave.Services.Implementations
 
             order.Status = status;
             
-            if (status == OrderStatus.Shipped)
+            if (status == OrderStatus.PickedUp)
+                order.PickedUpDate = DateTime.UtcNow;
+            else if (status == OrderStatus.Shipped)
                 order.ShippedDate = DateTime.UtcNow;
             else if (status == OrderStatus.Delivered)
                 order.DeliveredDate = DateTime.UtcNow;
@@ -137,6 +189,37 @@ namespace StoreWave.Services.Implementations
             }
 
             return result;
+        }
+
+        public async Task<bool> AssignDriverAsync(int orderId, int driverId)
+        {
+            var order = await _unitOfWork.Orders.GetByIdAsync(orderId);
+            if (order == null) return false;
+
+            order.DriverId = driverId;
+            order.Status = OrderStatus.PickedUp;
+            order.PickedUpDate = DateTime.UtcNow;
+
+            _unitOfWork.Orders.Update(order);
+            var result = await _unitOfWork.SaveChangesAsync() > 0;
+
+            if (result)
+            {
+                await _hubContext.Clients.Group($"Customer_{order.CustomerId}").SendAsync(
+                    "ReceiveOrderStatusUpdate",
+                    order.OrderNumber,
+                    OrderStatus.PickedUp.ToString(),
+                    order.ShippedDate,
+                    order.DeliveredDate);
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<OrderDto>> GetOrdersByDriverAsync(int driverId)
+        {
+            var orders = await _unitOfWork.Orders.GetOrdersByDriverAsync(driverId);
+            return _mapper.Map<IEnumerable<OrderDto>>(orders);
         }
 
         public async Task<IEnumerable<OrderDto>> GetRecentOrdersAsync()

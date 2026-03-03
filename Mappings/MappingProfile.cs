@@ -30,6 +30,7 @@ namespace StoreWave.Mappings
             // Order Mappings
             CreateMap<Order, OrderDto>()
                 .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.FullName))
+                .ForMember(dest => dest.DriverName, opt => opt.MapFrom(src => src.Driver != null ? src.Driver.FullName : null))
                 .ForMember(dest => dest.ItemCount, opt => opt.MapFrom(src => src.OrderItems.Count));
             CreateMap<OrderDto, Order>();
 

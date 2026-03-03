@@ -10,6 +10,7 @@ namespace StoreWave.Repositories.Interfaces
         Task<IEnumerable<Order>> GetOrdersByCustomerAsync(int customerId);
         Task<IEnumerable<Order>> GetOrdersByStatusAsync(OrderStatus status);
         Task<IEnumerable<Order>> GetRecentOrdersAsync(int count = 10);
+        Task<IEnumerable<Order>> GetOrdersByDriverAsync(int driverId);
         Task<decimal> GetTotalSalesAsync();
         Task<int> GetTotalOrdersAsync();
     }

@@ -61,4 +61,17 @@ namespace StoreWave.ViewModels
         public int OrderCount { get; set; }
         public decimal TotalAmount { get; set; }
     }
+
+    /// <summary>
+    /// Dashboard ViewModel for InDriver (Delivery Drivers)
+    /// </summary>
+    public class InDriverDashboardViewModel
+    {
+        public int AssignedOrders { get; set; }
+        public int DeliveredOrders { get; set; }
+        public int InTransitOrders { get; set; }
+        public int AvailableOrders { get; set; }
+        public List<OrderDto> ActiveOrders { get; set; } = new();
+        public List<OrderDto> RecentDeliveries { get; set; } = new();
+    }
 }

@@ -133,6 +133,28 @@ namespace StoreWave.Hubs
             _logger.LogInformation("Customer {CustomerId} left their notification group", customerId);
         }
 
+        /// <summary>
+        /// Allows an InDriver to join their personal driver notification group.
+        /// </summary>
+        [Authorize(Roles = "InDriver")]
+        public async Task JoinDriverGroup()
+        {
+            var userId = GetAuthenticatedUserId();
+            await Groups.AddToGroupAsync(Context.ConnectionId, $"Driver_{userId}");
+            _logger.LogInformation("Driver {DriverId} joined their notification group", userId);
+        }
+
+        /// <summary>
+        /// Allows an InDriver to leave their personal driver notification group.
+        /// </summary>
+        [Authorize(Roles = "InDriver")]
+        public async Task LeaveDriverGroup()
+        {
+            var userId = GetAuthenticatedUserId();
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"Driver_{userId}");
+            _logger.LogInformation("Driver {DriverId} left their notification group", userId);
+        }
+
         #region Server-to-Client Methods (called via IHubContext)
 
         // These methods are invoked from services using IHubContext<OrderHub>

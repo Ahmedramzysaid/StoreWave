@@ -45,7 +45,7 @@
 | 💳 **PayPal Integration** | Secure online payments via PayPal REST API |
 | 📧 **Email Automation** | OTP verification, order confirmations, role-based notifications via SMTP |
 | 🔔 **Real-Time Updates** | Live order tracking, cart sync, and chat via SignalR WebSockets |
-| 👥 **5-Role System** | Admin, Customer, Supplier, Accountant, Warehouse Manager |
+| 👥 **6-Role System** | Admin, Customer, Supplier, Accountant, Warehouse Manager, InDriver |
 | 🗺️ **Location Services** | GPS-based address detection via Nominatim/OpenStreetMap |
 | 🔒 **Security** | ASP.NET Identity with role-based authorization, anti-forgery tokens |
 | 📊 **Analytics Dashboards** | Revenue reports, sales analytics, payment method statistics |
@@ -54,7 +54,7 @@
 
 ## 👥 Role-Based Features
 
-StoreWave implements a granular **Role-Based Access Control (RBAC)** system with 5 distinct roles, each with dedicated dashboards and functionality:
+StoreWave implements a granular **Role-Based Access Control (RBAC)** system with 6 distinct roles, each with dedicated dashboards and functionality:
 
 ### 🔑 Admin — *Full System Control*
 
@@ -108,6 +108,17 @@ StoreWave implements a granular **Role-Based Access Control (RBAC)** system with
 | 📦 Inventory Management | Full inventory listing sorted by stock level |
 | ✏️ Stock Updates | Update stock quantities for individual products |
 | ⚠️ Low Stock Alerts | Products with stock ≤ 10 flagged for restocking |
+
+### 🚚 InDriver — *Delivery Management*
+
+| Feature | Description |
+|---------|-------------|
+| 📊 Dashboard | Assigned orders, in-transit count, delivered count, new orders at a glance |
+| 📦 Auto-Assignment | Orders are automatically assigned to the driver with fewest active deliveries (round-robin) |
+| 🔔 Real-Time Alerts | Instant SignalR notifications when a new order is assigned |
+| 📋 Order Management | View assigned orders, pick up, mark out-for-delivery, confirm delivery |
+| 🗺️ Delivery Progress | Visual step-by-step delivery tracker (Confirmed → PickedUp → OutForDelivery → Delivered) |
+| 📜 Delivery History | Full history of completed deliveries |
 
 ---
 
@@ -188,6 +199,7 @@ graph LR
         C10[CategoriesController]
         C11[ReviewsController]
         C12[HomeController]
+        C13[InDriverController]
     end
 
     subgraph "Service Layer"
@@ -237,6 +249,7 @@ graph LR
     C6 --> S10
     C7 --> S1
     C8 --> S1
+    C13 --> S2
 
     S1 --> R1
     S2 --> R1
@@ -425,6 +438,9 @@ classDiagram
         +PaymentMethod PaymentMethod
         +string Notes
         +int CustomerId
+        +int DriverId
+        +DateTime PickedUpDate
+        +Customer Driver
         +ICollection~OrderItem~ OrderItems
         +ICollection~ChatMessage~ ChatMessages
         +GenerateOrderNumber()
@@ -478,10 +494,13 @@ classDiagram
     class OrderStatus {
         <<enumeration>>
         Pending
+        Confirmed
         Processing
         Shipped
         Delivered
         Cancelled
+        PickedUp
+        OutForDelivery
     }
 
     class PaymentMethod {
@@ -491,6 +510,7 @@ classDiagram
     }
 
     Customer "1" --> "*" Order : places
+    Customer "1" --> "*" Order : delivers
     Customer "1" --> "*" Review : writes
     Customer "1" --> "*" CartItem : has
     Customer "1" --> "*" Product : supplies
@@ -526,8 +546,10 @@ classDiagram
         +CreateOrderAsync(userId, orderDto)
         +GetOrderByIdAsync(id)
         +GetOrdersByCustomerAsync(customerId)
+        +GetOrdersByDriverAsync(driverId)
         +GetRecentOrdersAsync()
         +UpdateOrderStatusAsync(id, status)
+        +AssignDriverAsync(orderId, driverId)
         +GetTotalSalesAsync()
         +GetTotalOrdersAsync()
     }
@@ -580,13 +602,14 @@ classDiagram
 ```
 📁 StoreWave/
 │
-├── 📁 Controllers/              # 12 MVC Controllers
+├── 📁 Controllers/              # 13 MVC Controllers
 │   ├── AccountController.cs         # Auth: Login, Register, OTP, Password Reset
 │   ├── AdminController.cs           # Admin Dashboard, Users, Orders, Chat
 │   ├── AccountantController.cs      # Financial Reports, Revenue, Sales
 │   ├── CartController.cs            # Shopping Cart, Checkout
 │   ├── CategoriesController.cs      # Category CRUD
 │   ├── HomeController.cs            # Home Page, Privacy
+│   ├── InDriverController.cs        # Driver Dashboard, Deliveries, Status Updates
 │   ├── OrdersController.cs          # Customer Order History
 │   ├── PaymentController.cs         # PayPal Payment Flow
 │   ├── ProductsController.cs        # Product CRUD & Browsing
@@ -605,17 +628,18 @@ classDiagram
 │   │   ├── Review.cs                # Product reviews & ratings
 │   │   └── ChatMessage.cs           # Real-time order chat messages
 │   ├── 📁 Enums/
-│   │   ├── OrderStatus.cs           # Pending → Processing → Shipped → Delivered
+│   │   ├── OrderStatus.cs           # Pending → Confirmed → Processing → Shipped → PickedUp → OutForDelivery → Delivered
 │   │   └── PaymentMethod.cs         # CashOnDelivery, PayPal
 │   └── ErrorViewModel.cs
 │
-├── 📁 Views/                    # 51 Razor Views (.cshtml)
+├── 📁 Views/                    # 54 Razor Views (.cshtml)
 │   ├── 📁 Account/   (7)           # Login, Register, Profile, OTP, Password
 │   ├── 📁 Admin/     (7)           # Dashboard, Users, Orders, Chat
 │   ├── 📁 Accountant/ (5)          # Financial Reports, Revenue
 │   ├── 📁 Cart/      (3)           # Cart, Checkout, Order Success
 │   ├── 📁 Categories/ (5)          # CRUD Views
 │   ├── 📁 Home/      (2)           # Index, Privacy
+│   ├── 📁 InDriver/  (3)           # Driver Dashboard, Orders, Order Details
 │   ├── 📁 Orders/    (2)           # Order History, Details
 │   ├── 📁 Products/  (5)           # Catalog, CRUD Views
 │   ├── 📁 Supplier/  (5)           # Dashboard, Product Management
@@ -737,6 +761,7 @@ graph TB
         SUPP[Suppliers]
         ACCT[Accountant]
         WH[Warehouse Manager]
+        DRV[InDrivers]
     end
 
     DEV -->|"Web Deploy"| IIS
@@ -755,6 +780,7 @@ graph TB
     SUPP -->|HTTPS| SSL
     ACCT -->|HTTPS| SSL
     WH -->|HTTPS| SSL
+    DRV -->|HTTPS| SSL
 ```
 
 ### Hosting Configuration
@@ -817,6 +843,9 @@ dotnet run
 | Supplier | `arzeka07@gmail.com` | `Supplier123!` |
 | Accountant | `arzeka177@gmail.com` | `Accountant123!` |
 | Warehouse | `ahmedramzysaeed02@gmail.com` | `Warehouse123!` |
+| InDriver | `driver1@storewave.com` | `Driver123!` |
+| InDriver | `driver2@storewave.com` | `Driver123!` |
+| InDriver | `driver3@storewave.com` | `Driver123!` |
 
 ---
 

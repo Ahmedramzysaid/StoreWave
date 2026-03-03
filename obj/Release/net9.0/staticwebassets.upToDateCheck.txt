@@ -114,6 +114,7 @@ wwwroot\lib\jquery\LICENSE.txt
 wwwroot\ReadMeImages\data_flow_1772316273168.png
 wwwroot\ReadMeImages\hosting_diagram_1772316316471.png
 wwwroot\ReadMeImages\system_architecture_1772316242185.png
+wwwroot\products\609147e0-4386-4f06-bf5e-a2b047dab285_Screenshot 2026-03-04 005408.png
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\LICENSE.txt
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.slim.min.map
 C:\Users\Ahmed Ramzy\OneDrive - Faculty of Computers & Artificial Intelligence\Desktop\project MVC\wwwroot\lib\jquery\dist\jquery.slim.min.js

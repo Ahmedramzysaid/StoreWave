@@ -1,0 +1,235 @@
+@model StoreWave.ViewModels.InDriverDashboardViewModel
+@using StoreWave.Models.Enums
+
+@{
+    ViewData["Title"] = "Driver Dashboard";
+}
+
+<div class="py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-2">
+        <h2 class="fw-bold mb-0">
+            <i class="bi bi-truck me-2" style="color: #f97316;"></i>
+            <span style="background: linear-gradient(135deg, #f97316, #fb923c); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Driver Dashboard</span>
+        </h2>
+        <span class="text-muted"><i class="bi bi-person-badge me-1"></i>Welcome, Driver!</span>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-3 g-lg-4 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 h-100 text-white" style="background: linear-gradient(135deg, #f97316, #fb923c) !important;">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-box-seam display-5"></i>
+                    <h3 class="fw-bold mt-2 mb-0">@Model.AvailableOrders</h3>
+                    <small class="opacity-75">New Orders</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 h-100 text-white" style="background: linear-gradient(135deg, #3b82f6, #60a5fa) !important;">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-clipboard-check display-5"></i>
+                    <h3 class="fw-bold mt-2 mb-0">@Model.AssignedOrders</h3>
+                    <small class="opacity-75">My Active Orders</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 h-100 text-white" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa) !important;">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-geo-alt display-5"></i>
+                    <h3 class="fw-bold mt-2 mb-0">@Model.InTransitOrders</h3>
+                    <small class="opacity-75">Out for Delivery</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 h-100 text-white" style="background: linear-gradient(135deg, #10b981, #34d399) !important;">
+                <div class="card-body text-center py-4">
+                    <i class="bi bi-check-circle display-5"></i>
+                    <h3 class="fw-bold mt-2 mb-0">@Model.DeliveredOrders</h3>
+                    <small class="opacity-75">Delivered</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Quick Actions -->
+        <div class="col-lg-4">
+            <div class="card border-0 h-100">
+                <div class="card-header py-3">
+                    <h5 class="card-title fw-bold mb-0">
+                        <i class="bi bi-lightning me-2" style="color: #f97316;"></i>Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-action="Orders" asp-route-filter="new" class="btn btn-outline-warning">
+                            <i class="bi bi-box-seam me-2"></i>New Orders (@Model.AvailableOrders)
+                        </a>
+                        <a asp-action="Orders" asp-route-filter="active" class="btn btn-outline-primary">
+                            <i class="bi bi-truck me-2"></i>My Active Deliveries
+                        </a>
+                        <a asp-action="Orders" asp-route-filter="delivered" class="btn btn-outline-success">
+                            <i class="bi bi-check-circle me-2"></i>Delivery History
+                        </a>
+                        <a asp-action="Orders" class="btn btn-outline-secondary">
+                            <i class="bi bi-list-check me-2"></i>All Orders
+                        </a>
+                        <a asp-controller="Account" asp-action="Profile" class="btn btn-outline-info">
+                            <i class="bi bi-person-circle me-2"></i>My Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Orders -->
+        <div class="col-lg-8">
+            <div class="card border-0 h-100">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="card-title fw-bold mb-0">
+                        <i class="bi bi-truck me-2" style="color: #3b82f6;"></i>Active Deliveries
+                    </h5>
+                    <a asp-action="Orders" asp-route-filter="active" class="btn btn-sm btn-outline-primary rounded-pill px-3">View All</a>
+                </div>
+                <div class="card-body p-0">
+                    @if (!Model.ActiveOrders.Any())
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-inbox display-4" style="color: var(--text-muted);"></i>
+                            <p class="mt-2 text-muted">No deliveries yet. New orders will be assigned to you automatically!</p>
+                            <a asp-action="Orders" class="btn btn-outline-secondary">
+                                <i class="bi bi-list-check me-1"></i>View All Orders
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Customer</th>
+                                        <th>Destination</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.ActiveOrders)
+                                    {
+                                        var statusBadge = order.Status switch {
+                                            OrderStatus.Confirmed => "bg-warning text-dark",
+                                            OrderStatus.PickedUp => "bg-info",
+                                            OrderStatus.OutForDelivery => "bg-primary",
+                                            _ => "bg-secondary"
+                                        };
+                                        <tr>
+                                            <td class="fw-semibold" style="color: #f97316;">@order.OrderNumber</td>
+                                            <td style="color: #e0e7ff;">@order.CustomerName</td>
+                                            <td>
+                                                <small>@order.ShippingCity, @order.ShippingCountry</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge @statusBadge">@order.Status</span>
+                                            </td>
+                                            <td class="text-end">
+                                                <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-outline-primary rounded-pill">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Deliveries -->
+    @if (Model.RecentDeliveries.Any())
+    {
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card border-0">
+                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="card-title fw-bold mb-0">
+                            <i class="bi bi-clock-history me-2" style="color: #10b981;"></i>Recent Deliveries
+                        </h5>
+                        <a asp-action="Orders" asp-route-filter="delivered" class="btn btn-sm btn-outline-success rounded-pill px-3">View All</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Customer</th>
+                                        <th>Total</th>
+                                        <th>Delivered</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.RecentDeliveries)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold" style="color: #10b981;">@order.OrderNumber</td>
+                                            <td>@order.CustomerName</td>
+                                            <td class="fw-semibold">$@order.TotalAmount.ToString("N2")</td>
+                                            <td>
+                                                <small>@order.DeliveredDate?.ToString("MMM dd, yyyy hh:mm tt")</small>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/orderHub")
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("ReceiveNewDelivery", function (orderNumber, totalAmount, address, city) {
+            // Show toast notification
+            const toast = document.createElement('div');
+            toast.className = 'position-fixed bottom-0 end-0 p-3';
+            toast.style.zIndex = '9999';
+            toast.innerHTML = `
+                <div class="toast show" role="alert">
+                    <div class="toast-header" style="background: #f97316; color: white;">
+                        <i class="bi bi-truck me-2"></i>
+                        <strong class="me-auto">New Delivery!</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        <strong>Order ${orderNumber}</strong><br>
+                        <small>$${parseFloat(totalAmount).toFixed(2)} — ${city}</small>
+                    </div>
+                </div>`;
+            document.body.appendChild(toast);
+
+            // Auto-reload after 3s to show the new order
+            setTimeout(() => location.reload(), 3000);
+        });
+
+        connection.start().then(() => {
+            connection.invoke("JoinDriverGroup");
+        }).catch(err => console.error('SignalR error:', err));
+    </script>
+}

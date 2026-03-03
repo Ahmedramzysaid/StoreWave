@@ -247,7 +247,7 @@ namespace StoreWave.Controllers
 
         // GET: Cart/OrderSuccess
         [HttpGet]
-        public IActionResult OrderSuccess()
+        public async Task<IActionResult> OrderSuccess()
         {
             var orderNumber = TempData["OrderNumber"]?.ToString();
             if (string.IsNullOrEmpty(orderNumber))
@@ -255,8 +255,13 @@ namespace StoreWave.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.OrderNumber = orderNumber;
-            return View();
+            var order = await _orderService.GetOrderByNumberAsync(orderNumber);
+            if (order == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(order);
         }
     }
 }

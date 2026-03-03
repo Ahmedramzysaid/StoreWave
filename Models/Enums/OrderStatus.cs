@@ -7,6 +7,8 @@ namespace StoreWave.Models.Enums
         Processing = 2,
         Shipped = 3,
         Delivered = 4,
-        Cancelled = 5
+        Cancelled = 5,
+        PickedUp = 6,
+        OutForDelivery = 7
     }
 }

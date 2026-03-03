@@ -1,0 +1,136 @@
+@model IEnumerable<StoreWave.DTOs.OrderDto>
+@using StoreWave.Models.Enums
+
+@{
+    ViewData["Title"] = "Delivery Orders";
+    var currentFilter = ViewBag.CurrentFilter as string ?? "all";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0"><i class="bi bi-truck me-2" style="color: #f97316;"></i>Delivery Orders</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Filter Tabs -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="d-flex flex-wrap gap-2">
+                <a asp-action="Orders" class="btn @(currentFilter == "all" ? "btn-primary" : "btn-outline-primary") rounded-pill">
+                    <i class="bi bi-list me-1"></i>All
+                </a>
+                <a asp-action="Orders" asp-route-filter="available" class="btn @(currentFilter == "available" ? "btn-warning" : "btn-outline-warning") rounded-pill">
+                    <i class="bi bi-box-seam me-1"></i>Available to Pickup
+                </a>
+                <a asp-action="Orders" asp-route-filter="active" class="btn @(currentFilter == "active" ? "btn-info" : "btn-outline-info") rounded-pill">
+                    <i class="bi bi-truck me-1"></i>My Active Deliveries
+                </a>
+                <a asp-action="Orders" asp-route-filter="delivered" class="btn @(currentFilter == "delivered" ? "btn-success" : "btn-outline-success") rounded-pill">
+                    <i class="bi bi-check-circle me-1"></i>Delivered
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-0">
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox display-4"></i>
+                    <p class="mt-2">No orders found for this filter.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0">Order #</th>
+                                <th class="border-0">Customer</th>
+                                <th class="border-0">Destination</th>
+                                <th class="border-0">Total</th>
+                                <th class="border-0">Status</th>
+                                <th class="border-0">Date</th>
+                                <th class="border-0 text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                var statusBadge = order.Status switch {
+                                    OrderStatus.Shipped => "bg-secondary",
+                                    OrderStatus.PickedUp => "bg-info",
+                                    OrderStatus.OutForDelivery => "bg-warning text-dark",
+                                    OrderStatus.Delivered => "bg-success",
+                                    _ => "bg-secondary"
+                                };
+                                var isAvailable = order.Status == OrderStatus.Shipped && order.DriverId == null;
+                                <tr>
+                                    <td class="align-middle fw-semibold" style="color: #f97316;">@order.OrderNumber</td>
+                                    <td class="align-middle">
+                                        <div style="color: #e0e7ff;">@order.CustomerName</div>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div>@order.ShippingCity</div>
+                                        <small style="color: var(--text-muted);">@order.ShippingAddress</small>
+                                    </td>
+                                    <td class="align-middle fw-bold" style="color: var(--success) !important;">$@order.TotalAmount.ToString("N2")</td>
+                                    <td class="align-middle">
+                                        <span class="badge @statusBadge">
+                                            @if (isAvailable)
+                                            {
+                                                <text>📦 Ready for Pickup</text>
+                                            }
+                                            else
+                                            {
+                                                @order.Status
+                                            }
+                                        </span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div style="color: #e0e7ff;">@order.OrderDate.ToString("MMM dd, yyyy")</div>
+                                        <small style="color: var(--text-muted);">@order.OrderDate.ToString("hh:mm tt")</small>
+                                    </td>
+                                    <td class="align-middle text-end">
+                                        @if (isAvailable)
+                                        {
+                                            <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-warning">
+                                                <i class="bi bi-hand-index me-1"></i>Pickup
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="OrderDetails" asp-route-id="@order.Id" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-eye me-1"></i>View
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

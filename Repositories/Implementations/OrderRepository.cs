@@ -52,8 +52,20 @@ namespace StoreWave.Repositories.Implementations
         {
             return await _dbSet
                 .Include(o => o.Customer)
+                .Include(o => o.Driver)
                 .OrderByDescending(o => o.OrderDate)
                 .Take(count)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersByDriverAsync(int driverId)
+        {
+            return await _dbSet
+                .Where(o => o.DriverId == driverId)
+                .Include(o => o.Customer)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
         }
 
