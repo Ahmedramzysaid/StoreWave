@@ -835,19 +835,6 @@ dotnet restore
 dotnet run
 ```
 
-### Default Seeded Accounts
-
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | `ramzyis258@gmail.com` | `Admin123!` |
-| Supplier | `arzeka07@gmail.com` | `Supplier123!` |
-| Accountant | `arzeka177@gmail.com` | `Accountant123!` |
-| Warehouse | `ahmedramzysaeed02@gmail.com` | `Warehouse123!` |
-| InDriver | `driver1@storewave.com` | `Driver123!` |
-| InDriver | `driver2@storewave.com` | `Driver123!` |
-| InDriver | `driver3@storewave.com` | `Driver123!` |
-
----
 
 <div align="center">
 
